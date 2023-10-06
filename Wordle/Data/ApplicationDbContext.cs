@@ -13,5 +13,7 @@ namespace Wordle.Data
         {
 
         }
+
+        public DbSet<GameModel> Games { get; set; }
     }
 }
