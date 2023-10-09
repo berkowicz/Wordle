@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Wordle.Data;
+﻿using Wordle.Data;
 
 namespace Wordle.Models.Helper
 {
@@ -18,8 +17,6 @@ namespace Wordle.Models.Helper
                 .Where(x => x.UserRefId == refId)
                 .Where(x => x.GameCompleted == false)
                 .FirstOrDefault();
-
-
 
             return game;
         }
