@@ -15,7 +15,8 @@ namespace Wordle.Models
         public string? Attempt3 { get; set; }
         public string? Attempt4 { get; set; } 
         public string? Attempt5 { get; set; }
-            
+
+        public bool DidNotFinish { get; set; }
         public bool GameCompleted { get; set; } = false;
 
         [ForeignKey("User")]

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
+using System.Text.Json.Serialization;
 using Wordle.Data;
 using Wordle.Models;
 using Wordle.Models.Helper;
@@ -31,19 +33,18 @@ namespace Wordle.Controllers
         }
 
         // GET api/<GameController>/5
-        [HttpGet("{id}")]
-        public GameModel? Get(string Id, GameHelper gameHelper)
+        [HttpGet("{UserId}")]
+        public IActionResult Get(string UserId)
         {
-            GameModel loadGame = gameHelper.FindGame(Id);
+            GameHelper helper = new GameHelper(_context);
 
-            return loadGame;
+            GameModel loadGame = helper.FindGame(UserId);
+
+            return Ok(loadGame); // Returns the GameHelper object as JSON
+          
         }
 
-        // POST api/<GameController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
