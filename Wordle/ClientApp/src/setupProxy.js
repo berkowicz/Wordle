@@ -5,13 +5,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
   env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:36723';
 
 const context =  [
-  "/api/game",
-  "/_configuration",
-  "/.well-known",
-  "/Identity",
-  "/connect",
-  "/ApplyDatabaseMigrations",
-  "/_framework"
+  "/api"
 ];
 
 module.exports = function(app) {

@@ -15,9 +15,11 @@ namespace Wordle.Models.Helper
         public GameModel? FindGame(string refId)
         {
             GameModel? game = _context.Games
-                .Include(x => x.UserRefId == refId)
-                .Include(x => x.GameCompleted == false)
+                .Where(x => x.UserRefId == refId)
+                .Where(x => x.GameCompleted == false)
                 .FirstOrDefault();
+
+
 
             return game;
         }
