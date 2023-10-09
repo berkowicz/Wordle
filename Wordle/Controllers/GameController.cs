@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
-using System.Text.Json.Serialization;
 using Wordle.Data;
 using Wordle.Models;
 using Wordle.Models.Helper;
@@ -15,10 +13,12 @@ namespace Wordle.Controllers
     public class GameController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly GameHelper _gameHelper;
 
         public GameController(ApplicationDbContext context)
         {
             _context = context;
+            _gameHelper = new GameHelper(context);
         }
 
         // POST: api/game
@@ -27,7 +27,7 @@ namespace Wordle.Controllers
         {
             var publicId = Guid.NewGuid().ToString();
             var gameword = "hello";
-            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameword });
+            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameword.ToUpper() });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
@@ -36,17 +36,25 @@ namespace Wordle.Controllers
         [HttpGet("{UserId}")]
         public IActionResult Get(string UserId)
         {
-            GameHelper helper = new GameHelper(_context);
+            //GameHelper helper = new GameHelper(_context);
 
-            GameModel loadGame = helper.FindGame(UserId);
+            //GameModel loadGame = helper.FindGame(UserId);
+
+            GameModel? loadGame = _gameHelper.FindGame(UserId);
 
             return Ok(loadGame); // Returns the GameHelper object as JSON
-          
+
         }
 
 
-        [HttpPatch("{gameid}/{word}/{attempt}")]
+        [HttpPut("{gameid}/{guess}")]
         //Return if correct, or correct characters
+        public ActionResult UpdateGame(string gameid, string guess)
+        {
+            GameModel update = _gameHelper.UpdateGameSession(gameid, guess);
+            return Ok(update);
+        }
+
 
         [HttpPost("highscore")]
         //Post finished game to high score

@@ -10,16 +10,16 @@ namespace Wordle.Models
         public string GameWord { get; set; }
 
 
-        public string? Attempt1 { get; set; }
-        public string? Attempt2 { get; set; }
-        public string? Attempt3 { get; set; }
-        public string? Attempt4 { get; set; }
-        public string? Attempt5 { get; set; }
+        public string? Attempt1 { get; set; } = string.Empty;
+        public string? Attempt2 { get; set; } = string.Empty;
+        public string? Attempt3 { get; set; } = string.Empty;
+        public string? Attempt4 { get; set; } = string.Empty;
+        public string? Attempt5 { get; set; } = string.Empty;
 
         public bool GameCompleted { get; set; } = false;
         public bool GameOver { get; set; } = false;
 
-        public int? Score { get; set; }
+        public int? Score { get; set; } = 1;
 
         [ForeignKey("User")]
         public string UserRefId { get; set; }
