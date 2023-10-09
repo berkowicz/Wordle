@@ -44,7 +44,13 @@ namespace Wordle.Controllers
           
         }
 
-        
+
+        [HttpPatch("{gameid}/{word}/{attempt}")]
+        //Return if correct, or correct characters
+
+        [HttpPost("highscore")]
+        //Post finished game to high score
+
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
