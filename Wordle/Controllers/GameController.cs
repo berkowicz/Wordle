@@ -13,10 +13,12 @@ namespace Wordle.Controllers
     public class GameController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly GameHelper _gameHelper;
 
-        public GameController(ApplicationDbContext context)
+        public GameController(ApplicationDbContext context, GameHelper gameHelper)
         {
             _context = context;
+            _gameHelper = gameHelper;
         }
 
         // POST: api/game
@@ -32,17 +34,11 @@ namespace Wordle.Controllers
 
         // GET api/<GameController>/5
         [HttpGet("{id}")]
-        public GameModel? Get(string Id, GameHelper gameHelper)
+        public GameModel? Get(string gameGuid)
         {
-            GameModel loadGame = gameHelper.FindGame(Id);
+            GameModel loadGame = _gameHelper.FindGame(gameGuid);
 
             return loadGame;
-        }
-
-        // POST api/<GameController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
         }
 
         // PUT api/<GameController>/5
