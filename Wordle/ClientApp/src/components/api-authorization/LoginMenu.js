@@ -54,7 +54,7 @@ export class LoginMenu extends Component {
         <NavLink replace tag={Link} className="text-dark" to={logoutPath} state={logoutState}>Logout</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink replace tag={Link} className="text-dark" to="/game" state={logoutState}>Nytt spel</NavLink>
+            <NavLink replace tag={Link} className="text-dark" to="/game" state={logoutState}>Spel</NavLink>
         </NavItem>
     </Fragment>);
   }

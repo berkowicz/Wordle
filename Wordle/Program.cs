@@ -33,18 +33,7 @@ namespace Wordle
             builder.Services.AddRazorPages();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(o =>
-            {
-                o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-               
-
-                });
-            });
+            builder.Services.AddSwaggerGen();
 
 
             var app = builder.Build();
