@@ -2,32 +2,36 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 
-let config;
-
-const newGame = async () => {
-    const token = await Auth.getAccessToken();
-
-    const config = {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    };
-
-    axios.post('/api/game', {}, config)
-        .then(response => console.log(response))
-        .catch(error => console.error(error));
-}
 
 
 const Game = () => {
 
-  const [attempts, setAttempts] = useState([]);
+    let config;
+    let myToken;
+    const [attempts, setAttempts] = useState([]);
+
+    useEffect(() => {
+        const fetchDataWithToken = async () => {
+            myToken = await Auth.getAccessToken()
+            config = {
+                headers: myToken ? { 'Authorization': `Bearer ${myToken}` } : {}
+            };
+            FetchData();
+        };
+
+        fetchDataWithToken();
+    }, []);
 
 
+    const newGame = async () => {
+
+        axios.post('/api/game', {}, config)
+            .then(response => console.log(response))
+            .catch(error => console.error(error));
+    }
     const FetchData = async () => {
-        const token = await Auth.getAccessToken();
-        const response = await fetch('api/game', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-
-        })
+        //Fetch a game 
+        const response = await fetch('api/game', config)
             .then(data => data.json())
             .then(data => {
                 console.log("user lodaded")
@@ -42,12 +46,8 @@ const Game = () => {
                 console.log(attempts)
 
             })
-    }
+    }      
 
-  useEffect(() => {
-      FetchData()
-  
-  }, [])
 
   return (
     <>
