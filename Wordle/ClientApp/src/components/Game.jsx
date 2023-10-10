@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 
-
-
 const Game = () => {
 
     let config;
