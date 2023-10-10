@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 using Wordle.Data;
 using Wordle.Models;
 using Wordle.Models.Helper;
@@ -25,22 +29,33 @@ namespace Wordle.Controllers
         [HttpPost]
         public NewGameViewModel NewGame()
         {
+
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+
             var publicId = Guid.NewGuid().ToString();
             var gameword = "hello";
-            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameword.ToUpper() });
+            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameword.ToUpper(), UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
 
         // GET api/<GameController>/5
-        [HttpGet("{UserId}")]
-        public IActionResult Get(string UserId)
+        [HttpGet]
+        public IActionResult Get()
         {
             //GameHelper helper = new GameHelper(_context);
 
-            //GameModel loadGame = helper.FindGame(UserId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+         
+            if (userId == null)
+            {
+                return Unauthorized("Not authorized");
+            }
 
-            GameModel? loadGame = _gameHelper.FindGame(UserId);
+
+            GameModel loadGame = _gameHelper.FindGame(userId);
 
             return Ok(loadGame); // Returns the GameHelper object as JSON
 
