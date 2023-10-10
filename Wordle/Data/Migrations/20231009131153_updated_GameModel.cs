@@ -19,7 +19,8 @@ namespace Wordle.Data.Migrations
                 name: "Score",
                 table: "Games",
                 type: "int",
-                nullable: true);
+                nullable: true,
+                defaultValue: 1);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

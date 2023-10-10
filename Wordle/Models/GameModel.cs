@@ -19,7 +19,7 @@ namespace Wordle.Models
         public bool GameCompleted { get; set; } = false;
         public bool GameOver { get; set; } = false;
 
-        public int? Score { get; set; }
+        public int? Score { get; set; } = 1;
 
         [ForeignKey("User")]
         public string UserRefId { get; set; }
