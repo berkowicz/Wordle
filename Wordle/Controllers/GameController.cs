@@ -31,7 +31,7 @@ namespace Wordle.Controllers
         {
 
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
 
             var publicId = Guid.NewGuid().ToString();
@@ -41,11 +41,10 @@ namespace Wordle.Controllers
             return new NewGameViewModel() { GameId = publicId };
         }
 
-        // GET api/<GameController>/5
+        // GET api/game
         [HttpGet]
         public IActionResult Get()
         {
-            //GameHelper helper = new GameHelper(_context);
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
          

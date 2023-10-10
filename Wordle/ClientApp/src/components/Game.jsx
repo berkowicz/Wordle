@@ -19,7 +19,6 @@ const newGame = async () => {
 
 const Game = () => {
 
-  //const [userId, setUserId] = useState("");
   const [attempts, setAttempts] = useState([]);
 
 
@@ -46,29 +45,9 @@ const Game = () => {
     }
 
   useEffect(() => {
-      //UserId()
       FetchData()
-
   
   }, [])
-
-  //useEffect(() => {
-  
-  //}, [userId])
-
-  
-
- 
-
-
-  //const UserId = () => {
-  //  const token = localStorage.getItem('Wordleuser:https://localhost:44479:Wordle')
-  //  const parsedData = JSON.parse(token)
-  //  const profile = parsedData.profile.sub
-  //  console.log(profile);
-  //  setUserId(profile);
-  
-  //}
 
   return (
     <>
