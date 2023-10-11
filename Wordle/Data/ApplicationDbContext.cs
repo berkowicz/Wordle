@@ -15,5 +15,6 @@ namespace Wordle.Data
         }
 
         public DbSet<GameModel> Games { get; set; }
+        public DbSet<HighscoreModel> Highscores { get; set; }
     }
 }
