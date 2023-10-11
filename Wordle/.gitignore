@@ -230,3 +230,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/.idea/.idea.Wordle/.idea/.gitignore
+/.idea/.idea.Wordle/.idea/dataSources.xml
+/.idea/.idea.Wordle/.idea/indexLayout.xml
+/.idea/.idea.Wordle/.idea/vcs.xml

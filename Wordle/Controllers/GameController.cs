@@ -35,8 +35,8 @@ namespace Wordle.Controllers
 
 
             var publicId = Guid.NewGuid().ToString();
-            var gameword = "hello";
-            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameword.ToUpper(), UserRefId = userId });
+            var gameWord = "hello";
+            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord.ToUpper(), UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
@@ -53,9 +53,13 @@ namespace Wordle.Controllers
                 return Unauthorized("Not authorized");
             }
 
+           
 
             GameModel loadGame = _gameHelper.FindGame(userId);
-
+            if (loadGame == null)
+            {
+                return NotFound("No active game");
+            }
             return Ok(loadGame); // Returns the GameHelper object as JSON
 
         }

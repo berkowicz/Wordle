@@ -15,9 +15,8 @@ namespace Wordle.Models.Helper
         public GameModel? FindGame(string refId)
         {
             GameModel? game = _context.Games
-                .Where(x => x.UserRefId == refId)
-                .Where(x => x.GameCompleted == false)
-                .FirstOrDefault();
+                .Where(x => x.UserRefId == refId && x.GameCompleted == false)   
+                .Single();
 
             return game;
         }
