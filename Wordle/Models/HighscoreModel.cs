@@ -10,7 +10,7 @@ namespace Wordle.Models
         public int Score { get; set; }
 
         [ForeignKey("Game")]
-        public string GameRefId { get; set; }
+        public int GameRefId { get; set; }
         public virtual GameModel Game { get; set; }
     }
 }

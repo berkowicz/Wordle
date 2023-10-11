@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using Wordle.Data;
 using Wordle.Models;
 using Wordle.Models.Helper;
@@ -47,7 +44,7 @@ namespace Wordle.Controllers
         {
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-         
+
             if (userId == null)
             {
                 return Unauthorized("Not authorized");
@@ -61,7 +58,7 @@ namespace Wordle.Controllers
         }
 
 
-        [HttpPut("{gameid}/{guess}")]
+        /*[HttpPut("{gameid}/{guess}")]
         //Return if correct, or correct characters
         public IActionResult UpdateGame(string gameid, string guess)
         {
@@ -79,6 +76,24 @@ namespace Wordle.Controllers
             {
                 return Ok(update);
             }
+        }*/
+
+        [HttpPut("{gameid}/{guess}")]
+        //Return if correct, or correct characters
+        public IActionResult UpdateGame(string gameid, string guess)
+        {
+            var gameModel = _gameHelper.UpdateGameModel(gameid, guess);
+            if (gameModel is null)
+            {
+                throw new ArgumentNullException("gameid");
+            }
+            else
+            {
+                // Returns char array with info of each letters position
+                var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
+                return Ok(viewModel);
+            }
+
         }
 
 
