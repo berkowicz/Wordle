@@ -90,7 +90,7 @@ namespace Wordle.Controllers
             else
             {
                 // Returns char array with info of each letters position
-                var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
+                var viewModel = _gameHelper.CheckWord(guess.ToUpper(), gameModel.GameWord.ToUpper());
                 return Ok(viewModel);
             }
 
