@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Wordle.Data;
 using Wordle.Models;
-
+using Microsoft.OpenApi.Models;
 
 namespace Wordle
 {
@@ -32,11 +32,19 @@ namespace Wordle
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+
             var app = builder.Build();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+   
                 app.UseMigrationsEndPoint();
             }
             else
