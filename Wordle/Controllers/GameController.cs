@@ -49,10 +49,22 @@ namespace Wordle.Controllers
 
         [HttpPut("{gameid}/{guess}")]
         //Return if correct, or correct characters
-        public ActionResult UpdateGame(string gameid, string guess)
+        public IActionResult UpdateGame(string gameid, string guess)
         {
-            GameModel update = _gameHelper.UpdateGameSession(gameid, guess);
-            return Ok(update);
+            GameModel? update = _gameHelper.UpdateGameSession(gameid, guess, HttpContext);
+
+            if (HttpContext.Response.StatusCode == 404)
+            {
+                return NotFound("Could not find game");
+            }
+            else if (HttpContext.Response.StatusCode == 400)
+            {
+                return BadRequest("You allready played this game through");
+            }
+            else
+            {
+                return Ok(update);
+            }
         }
 
 
