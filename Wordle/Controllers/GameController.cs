@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using Wordle.Data;
 using Wordle.Models;
 using Wordle.Models.Helper;
@@ -47,7 +44,7 @@ namespace Wordle.Controllers
         {
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-         
+
             if (userId == null)
             {
                 return Unauthorized("Not authorized");
@@ -61,12 +58,42 @@ namespace Wordle.Controllers
         }
 
 
+        /*[HttpPut("{gameid}/{guess}")]
+        //Return if correct, or correct characters
+        public IActionResult UpdateGame(string gameid, string guess)
+        {
+            GameModel? update = _gameHelper.UpdateGameSession(gameid, guess, HttpContext);
+
+            if (HttpContext.Response.StatusCode == 404)
+            {
+                return NotFound("Could not find game");
+            }
+            else if (HttpContext.Response.StatusCode == 400)
+            {
+                return BadRequest("You allready played this game through");
+            }
+            else
+            {
+                return Ok(update);
+            }
+        }*/
+
         [HttpPut("{gameid}/{guess}")]
         //Return if correct, or correct characters
-        public ActionResult UpdateGame(string gameid, string guess)
+        public IActionResult UpdateGame(string gameid, string guess)
         {
-            GameModel update = _gameHelper.UpdateGameSession(gameid, guess);
-            return Ok(update);
+            var gameModel = _gameHelper.UpdateGameModel(gameid, guess);
+            if (gameModel is null)
+            {
+                throw new ArgumentNullException("gameid");
+            }
+            else
+            {
+                // Returns char array with info of each letters position
+                var viewModel = _gameHelper.CheckWord(guess.ToUpper(), gameModel.GameWord.ToUpper());
+                return Ok(viewModel);
+            }
+
         }
 
 
