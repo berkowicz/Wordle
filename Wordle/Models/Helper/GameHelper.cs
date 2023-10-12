@@ -16,16 +16,17 @@ namespace Wordle.Models.Helper
         public GameModel? FindGame(string refId)
         {
             GameModel? game = _context.Games
-                .Where(x => x.UserRefId == refId && x.GameCompleted == false)
+                .Where(x => x.UserRefId == refId && x.GameCompleted == false && x.GameOver == false)
                 .Single();
 
             return game;
         }
 
         // Updates GameModel in DB and add to highscore if game is won
-        public GameModel UpdateGameModel(string gameId, string guess)
+        public GameModel UpdateGameModel(string userId, string guess)
         {
-            var game = _context.Games.Where(x => x.PublicId == gameId).SingleOrDefault();
+            // Finds gamesession
+            var game = FindGame(userId);
 
             // If game is not found or finished return null
             if (game == null || game.GameOver is true || game.GameCompleted is true)
