@@ -127,7 +127,7 @@ namespace Wordle.Models.Helper
                 .Take(10)
                 .ToList();
 
-            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>();
+            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(alltime));
 
             return hsViewModel;
         }
@@ -136,14 +136,14 @@ namespace Wordle.Models.Helper
         public IEnumerable<HighscoreViewModel> HighscoreToday()
         {
             // Sort out todays top 10 ressult by score then by time.
-            List<HighscoreModel> alltime = _context.Highscores
+            List<HighscoreModel> today = _context.Highscores
                 .Where(x => x.Date == DateTime.Now.Date)
                 .OrderByDescending(x => x.Score)
                 .ThenByDescending(x => x.Timer)
                 .Take(10)
                 .ToList();
 
-            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(alltime));
+            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(today));
 
             return hsViewModel;
         }
