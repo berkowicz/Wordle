@@ -60,8 +60,13 @@ namespace Wordle.Models.Helper
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
                     game.GameCompleted = true;
-                    //game.Score--; //Db wont allow 0 so -- because counter starts at 1. 
-                    HighscoreModel x = new HighscoreModel() { Score = game.Score, Timer = (DateTime.Now.Second - game.Timer.Second), GameRefId = game.Id };
+                    HighscoreModel x = new HighscoreModel()
+                    {
+                        Score = game.Score,
+                        Timer = (DateTime.Now.Second - game.Timer.Second),
+                        Date = DateTime.Now,
+                        GameRefId = game.Id
+                    };
                     _context.Highscores.Add(x);
                 }
                 // Game Over scenario
