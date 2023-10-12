@@ -16,70 +16,17 @@ namespace Wordle.Models.Helper
         public GameModel? FindGame(string refId)
         {
             GameModel? game = _context.Games
-                .Where(x => x.UserRefId == refId && x.GameCompleted == false)   
+                .Where(x => x.UserRefId == refId && x.GameCompleted == false && x.GameOver == false)
                 .Single();
 
             return game;
         }
 
-        /*public GameModel? UpdateGameSession(string gameId, string guess, HttpContext httpContext)
+        // Updates GameModel in DB and add to highscore if game is won
+        public GameModel UpdateGameModel(string userId, string guess)
         {
-            GameModel? game = _context.Games.Where(x => x.PublicId == gameId).SingleOrDefault();
-
-            if (game == null)
-            {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return game;
-            }
-            else if (game.GameOver is true || game.GameCompleted is true)
-            {
-                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return game;
-            }
-            else
-            {
-                game.Score++;
-
-                switch (game.Score)
-                {
-                    case 2:
-                        game.Attempt1 = guess;
-                        break;
-                    case 3:
-                        game.Attempt2 = guess;
-                        break;
-                    case 4:
-                        game.Attempt3 = guess;
-                        break;
-                    case 5:
-                        game.Attempt4 = guess;
-                        break;
-                    case 6:
-                        game.Attempt5 = guess;
-                        break;
-                }
-
-                if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
-                {
-                    game.GameCompleted = true;
-                    game.Score--;
-                }
-                else if (game.Score == 6)
-                {
-                    game.GameOver = true;
-                    game.Score = null;
-                }
-
-                _context.SaveChanges();
-                return game;
-            }
-
-        }*/
-
-        // Updates GameModel in DB
-        public GameModel UpdateGameModel(string gameId, string guess)
-        {
-            var game = _context.Games.Where(x => x.PublicId == gameId).SingleOrDefault();
+            // Finds gamesession
+            var game = FindGame(userId);
 
             // If game is not found or finished return null
             if (game == null || game.GameOver is true || game.GameCompleted is true)
@@ -93,35 +40,42 @@ namespace Wordle.Models.Helper
 
                 switch (game.Score) //Set guess to attempt(x)
                 {
-                    case 2:
+                    case 1:
                         game.Attempt1 = guess;
                         break;
-                    case 3:
+                    case 2:
                         game.Attempt2 = guess;
                         break;
-                    case 4:
+                    case 3:
                         game.Attempt3 = guess;
                         break;
-                    case 5:
+                    case 4:
                         game.Attempt4 = guess;
                         break;
-                    case 6:
+                    case 5:
                         game.Attempt5 = guess;
                         break;
                 }
-                // Win scenario
+                // Win scenario also Post result to Highscore
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
                     game.GameCompleted = true;
-                    game.Score--; //Db wont allow 0 so -- because counter starts at 1. 
+                    HighscoreModel x = new HighscoreModel()
+                    {
+                        Score = game.Score,
+                        Timer = (DateTime.Now.Second - game.Timer.Second),
+                        Date = DateTime.Now.Date,
+                        GameRefId = game.Id
+                    };
+                    _context.Highscores.Add(x);
                 }
                 // Game Over scenario
-                else if (game.Score == 6)
+                else if (game.Score == 5)
                 {
                     game.GameOver = true;
-                    game.Score = null;
+                    game.Score = 0;
                 }
-
+                // Save changes and return GameModel
                 _context.SaveChanges();
                 return game;
             }

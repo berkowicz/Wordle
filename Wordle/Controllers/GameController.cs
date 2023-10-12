@@ -50,7 +50,7 @@ namespace Wordle.Controllers
                 return Unauthorized("Not authorized");
             }
 
-           
+
 
             GameModel loadGame = _gameHelper.FindGame(userId);
             if (loadGame == null)
@@ -62,31 +62,18 @@ namespace Wordle.Controllers
         }
 
 
-        /*[HttpPut("{gameid}/{guess}")]
+        [HttpPut("{guess}")]
         //Return if correct, or correct characters
-        public IActionResult UpdateGame(string gameid, string guess)
+        public IActionResult UpdateGame(string guess)
         {
-            GameModel? update = _gameHelper.UpdateGameSession(gameid, guess, HttpContext);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (HttpContext.Response.StatusCode == 404)
+            if (userId == null)
             {
-                return NotFound("Could not find game");
+                return Unauthorized("Not authorized");
             }
-            else if (HttpContext.Response.StatusCode == 400)
-            {
-                return BadRequest("You allready played this game through");
-            }
-            else
-            {
-                return Ok(update);
-            }
-        }*/
 
-        [HttpPut("{gameid}/{guess}")]
-        //Return if correct, or correct characters
-        public IActionResult UpdateGame(string gameid, string guess)
-        {
-            var gameModel = _gameHelper.UpdateGameModel(gameid, guess);
+            var gameModel = _gameHelper.UpdateGameModel(userId, guess);
             if (gameModel is null)
             {
                 throw new ArgumentNullException("gameid");
@@ -104,12 +91,6 @@ namespace Wordle.Controllers
         [HttpPost("highscore")]
         //Post finished game to high score
 
-
-        // PUT api/<GameController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<GameController>/5
         [HttpDelete("{id}")]
