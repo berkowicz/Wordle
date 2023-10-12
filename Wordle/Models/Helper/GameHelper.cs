@@ -64,7 +64,7 @@ namespace Wordle.Models.Helper
                     {
                         Score = game.Score,
                         Timer = (DateTime.Now.Second - game.Timer.Second),
-                        Date = DateTime.Now,
+                        Date = DateTime.Now.Date,
                         GameRefId = game.Id
                     };
                     _context.Highscores.Add(x);
