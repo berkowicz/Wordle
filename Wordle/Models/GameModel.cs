@@ -19,8 +19,9 @@ namespace Wordle.Models
 
         public bool GameCompleted { get; set; } = false;
         public bool GameOver { get; set; } = false;
+        public DateTime Timer { get; set; } = DateTime.Now;
 
-        public int? Score { get; set; } = 1;
+        public int Score { get; set; } = 0;
 
         [ForeignKey("User")]
         public string UserRefId { get; set; }

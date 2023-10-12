@@ -8,6 +8,7 @@ namespace Wordle.Models
         [Key]
         public int Id { get; set; }
         public int Score { get; set; }
+        public int Timer { get; set; }
 
         [ForeignKey("Game")]
         public int GameRefId { get; set; }
