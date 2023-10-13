@@ -2,6 +2,9 @@ import React from 'react'
 
 const Guess = ({ value }) => {
 
+    console.log("value")
+console.log(value)
+
 const data = JSON.parse(value);
 const guess = data.Guess;
 const status = data.LetterStatus;

@@ -71,28 +71,51 @@ const Game = () => {
                 }
             })
             .then(data => {
+                
+                
+                
+                console.log("Orginal")
+                console.log(data)
+                
 
                 //For each "Attempt"-key, assign it to attempts usestate
                 for (let i = 1; i <= 5; i++) {
                     const attemptKey = `attempt${i}`;
-                    const attemptValue = data[attemptKey];
-                    setAttempts((prevAttempts) => [...prevAttempts, attemptValue]);
+                    const attemptValue = data[attemptKey]
+                    console.log(attemptValue)
+                    if(attemptValue != null){
+
+                        setAttempts((prevAttempts) => [...prevAttempts, attemptValue]);
+
+                    }
                 }
 
             })
     }
 
     const SendGuess = async () => {
-        console.log("Load")
 
+        //Add put method to header config
         let putConfig = {
             ...config,
             method: 'PUT'
           };
 
         const response = await fetch(`${apiHost}/${guess}`, putConfig)
-            .then(data => {
-                console.log(data.json())
+            .then(data => data.json())
+            .then(result => {
+                const resultWithUppercaseKeys = Object.keys(result).reduce((acc, key) => {
+                    acc[key.charAt(0).toUpperCase() + key.slice(1)] = result[key];
+                    return acc;
+                }, {});
+
+
+
+                console.log("Skicka")
+                console.log(resultWithUppercaseKeys)
+                
+                setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
+
             })
     }
 
@@ -107,11 +130,13 @@ const Game = () => {
     }, [guess])
 
 
+    useEffect(() => {
+        console.log(attempts)
+    }, [attempts])
+
+
   return (
     <>
-    {}
-    <div>Game</div>
-
     {
       attempts.map(prop => (
         prop ? 
