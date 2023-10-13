@@ -11,20 +11,20 @@ namespace Wordle.Controllers
     public class HighscoreController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly GameHelper _gameHelper;
+        private readonly HighscoreHelper _highscoreHelper;
 
         public HighscoreController(ApplicationDbContext context)
         {
             _context = context;
-            _gameHelper = new GameHelper(context);
+            _highscoreHelper = new HighscoreHelper(context);
         }
 
         // GET api/<HighscoreController>
         [HttpGet]
         public IActionResult Get()
         {
-            var highscoreAllTime = _gameHelper.HighscoreAllTime();
-            var highscoreToday = _gameHelper.HighscoreToday();
+            var highscoreAllTime = _highscoreHelper.HighscoreAllTime();
+            var highscoreToday = _highscoreHelper.HighscoreToday();
 
             var result = new
             {
@@ -33,24 +33,6 @@ namespace Wordle.Controllers
             };
 
             return Ok(result);
-        }
-
-        // POST api/<HighscoreController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<HighscoreController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<HighscoreController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
