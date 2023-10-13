@@ -11,44 +11,31 @@ namespace Wordle.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly ProfileHelper _gameHelper;
+        private readonly ProfileHelper _profileHelper;
 
         public ProfileController(ApplicationDbContext context)
         {
             _context = context;
-            _gameHelper = new ProfileHelper(context);
+            _profileHelper = new ProfileHelper(context);
         }
 
         // GET: api/<ProfileController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        /*[HttpGet]
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        // GET api/<ProfileController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            if (userId == null)
+            {
+                return Unauthorized("Not authorized");
+            }
 
-        // POST api/<ProfileController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ProfileController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ProfileController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+            ProfileViewModel userData = _profileHelper.UserGameData(userId);
+            if (userData == null)
+            {
+                return NotFound("No active game");
+            }
+            return Ok(userData); // Returns the GameHelper object as JSON
+        }*/
     }
 }

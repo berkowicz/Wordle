@@ -10,5 +10,13 @@ namespace Wordle.Models.Helper
         {
             _context = context;
         }
+
+        /*public ProfileViewModel UserGameData(string userId)
+        {
+            // Sort out alltime top 10 ressult by score then by time.
+            var userGames = _context.Games
+                .Include(x => x.UserRefId == userId)
+                .ToList();
+        }*/
     }
 }
