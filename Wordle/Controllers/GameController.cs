@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Wordle.Data;
 using Wordle.Models;
@@ -40,6 +41,7 @@ namespace Wordle.Controllers
 
         // GET api/game
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
 
