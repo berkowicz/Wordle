@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
+import Guess from './Guess';
 
 let config = { headers: {} }; //Request header to be filled with JWT token
 let myToken;
@@ -19,6 +20,8 @@ const Game = () => {
 
  
     const [attempts, setAttempts] = useState([]);
+    const [guess, setGuess] = useState("");
+    const [guessCount, setGuessCount] = useState(0);
 
 
     //Set token and request header config at load
@@ -77,7 +80,31 @@ const Game = () => {
                 }
 
             })
-    }      
+    }
+
+    const SendGuess = async () => {
+        console.log("Load")
+
+        let putConfig = {
+            ...config,
+            method: 'PUT'
+          };
+
+        const response = await fetch(`${apiHost}/${guess}`, putConfig)
+            .then(data => {
+                console.log(data.json())
+            })
+    }
+
+    
+
+    useEffect(() => {
+        if (guess.length === 5) {
+            console.log("5 letters!");
+            SendGuess();
+            setGuess("");
+        }
+    }, [guess])
 
 
   return (
@@ -87,13 +114,17 @@ const Game = () => {
 
     {
       attempts.map(prop => (
-        prop ? prop : <div>Empty</div>
+        prop ? 
+        <Guess value={ prop } />: 
+        <div>Empty</div>
 
       ))
           }
 
           <div>Input fields</div>
-          
+          <form>
+            <input type="text" name="input" id="guessinput" value={ guess } onChange={ (e) => setGuess(e.target.value) } />
+          </form>
           
     </>
   )

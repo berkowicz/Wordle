@@ -12,3 +12,17 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.letter-1{
+  color: green;
+}
+.letter-2{
+  color: yellow;
+}
+.letter-3{
+  color: red;
+}
+
+.guessword{
+  display: flex;
+}
