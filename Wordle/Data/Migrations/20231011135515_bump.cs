@@ -78,11 +78,6 @@ namespace Wordle.Data.Migrations
                 type: "nvarchar(450)",
                 nullable: false,
                 defaultValue: "");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Highscores",
-                table: "Highscores",
-                column: "UserId");
         }
     }
 }

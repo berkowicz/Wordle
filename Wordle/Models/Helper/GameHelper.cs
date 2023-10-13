@@ -63,9 +63,9 @@ namespace Wordle.Models.Helper
                     HighscoreModel x = new HighscoreModel()
                     {
                         Score = game.Score,
-                        Timer = (DateTime.Now.Second - game.Timer.Second),
+                        Timer = (game.Timer.Second - DateTime.Now.Second),
                         Date = DateTime.Now.Date,
-                        GameRefId = game.Id
+                        GameRefId = game.Id,
                     };
                     _context.Highscores.Add(x);
                 }
@@ -116,5 +116,57 @@ namespace Wordle.Models.Helper
             }
             return new GameViewModel { Guess = guessArr, LetterStatus = letterStatus };
         }
+
+        // Highscore Alltime
+        public IEnumerable<HighscoreViewModel> HighscoreAllTime()
+        {
+            // Sort out alltime top 10 ressult by score then by time.
+            List<HighscoreModel> alltime = _context.Highscores
+                .OrderByDescending(x => x.Score)
+                .ThenByDescending(x => x.Timer)
+                .Take(10)
+                .ToList();
+
+            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(alltime));
+
+            return hsViewModel;
+        }
+
+        // Highscore Today
+        public IEnumerable<HighscoreViewModel> HighscoreToday()
+        {
+            // Sort out todays top 10 ressult by score then by time.
+            List<HighscoreModel> today = _context.Highscores
+                .Where(x => x.Date == DateTime.Now.Date)
+                .OrderByDescending(x => x.Score)
+                .ThenByDescending(x => x.Timer)
+                .Take(10)
+                .ToList();
+
+            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(today));
+
+            return hsViewModel;
+        }
+
+        // Creates HighscoreViewModel list of HighscoreModel
+        public IEnumerable<HighscoreViewModel> HighscoreToViewModel(IEnumerable<HighscoreModel> hsModel)
+        {
+            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>();
+
+            // Puts ressults into viewmodel
+            foreach (HighscoreModel model in hsModel)
+            {
+                HighscoreViewModel x = new HighscoreViewModel()
+                {
+                    Score = model.Score,
+                    Timer = model.Timer,
+                    Date = model.Date,
+                };
+                hsViewModel.Add(x);
+            }
+
+            return hsViewModel;
+        }
+
     }
 }

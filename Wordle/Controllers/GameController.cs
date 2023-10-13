@@ -87,11 +87,6 @@ namespace Wordle.Controllers
 
         }
 
-
-        [HttpPost("highscore")]
-        //Post finished game to high score
-
-
         // DELETE api/<GameController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
