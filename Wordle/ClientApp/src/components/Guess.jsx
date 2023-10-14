@@ -17,8 +17,8 @@ console.log(status)
 
 {    
 status.map((prop, index) => (
-        <div key={index} className={`letter-${prop}`}> 
-            {guess[index]}
+        <div key={index} className={`letter letter-${prop}`}> 
+            {guess[index].toUpperCase()}
         </div>
 
       ))

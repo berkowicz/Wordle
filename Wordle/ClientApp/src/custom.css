@@ -12,15 +12,33 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+.letter{
+  height: 4rem;
+  width: 4rem;
+  background: rgb(196, 196, 196);
+  color: rgb(48, 48, 48);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  margin: .25rem;
+  border-radius: .5rem;
+
+}
 
 .letter-1{
-  color: green;
+  background: #afd75e;
 }
 .letter-2{
-  color: yellow;
+  background: rgb(253, 229, 79);
 }
 .letter-3{
-  color: red;
+  background: #ff7272;
+}
+
+.active > .letter{
+  background-color: #e0e0e0;
+  border: .25rem solid #808080;
 }
 
 .guessword{

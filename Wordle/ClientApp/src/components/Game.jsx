@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 import Guess from './Guess';
+import Input from './Input';
 
 let config = { headers: {} }; //Request header to be filled with JWT token
 let myToken;
@@ -22,6 +23,7 @@ const Game = () => {
     const [attempts, setAttempts] = useState([]);
     const [guess, setGuess] = useState("");
     const [guessCount, setGuessCount] = useState(0);
+    const [gameFinished, setGameFinished] = useState(false)
 
 
     //Set token and request header config at load
@@ -112,8 +114,12 @@ const Game = () => {
 
 
                 console.log("Skicka")
-                console.log(resultWithUppercaseKeys)
+                console.log(result.correct)
                 
+                if(result.correct){
+                    setGameFinished(true);
+                }
+
                 setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
 
             })
@@ -139,17 +145,31 @@ const Game = () => {
     <>
     {
       attempts.map(prop => (
-        prop ? 
-        <Guess value={ prop } />: 
-        <div>Empty</div>
+         <>
+        <Guess value={ prop } />
 
+         </>
       ))
-          }
 
-          <div>Input fields</div>
+      
+          }
+        <div className=' guessword input active'>
+        <Input value={ guess }  />
+
+        </div>
+        {
+        Array(4 - attempts.length).fill(null).map((_, index) => (
+            <div className=' guessword input'>
+            <Input  />
+            </div>
+        ))
+    }
+        
+        {gameFinished ? <div>Du klarade det!</div> :
           <form>
             <input type="text" name="input" id="guessinput" value={ guess } onChange={ (e) => setGuess(e.target.value) } />
           </form>
+}
           
     </>
   )

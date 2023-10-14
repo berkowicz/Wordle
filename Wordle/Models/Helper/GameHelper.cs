@@ -18,7 +18,7 @@ namespace Wordle.Models.Helper
         {
             GameModel? game = _context.Games
                 .Where(x => x.UserRefId == refId && x.GameCompleted == false && x.GameOver == false)
-                .Single();
+                .FirstOrDefault();
 
             return game;
         }
@@ -91,7 +91,13 @@ namespace Wordle.Models.Helper
         //Checks the placement of each letter in guess
         public GameViewModel CheckWord(string guess, string gameWord)
         {
-           return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus( guess, gameWord ) };
+            if (guess == gameWord)
+            {
+                return new GameViewModel
+                    { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord), Correct = true };
+            }
+            
+           return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus( guess, gameWord )};
         }
 
         // Highscore Alltime
