@@ -4,5 +4,7 @@
     {
         public char[] Guess { get; set; }
         public char[] LetterStatus { get; set; }
+
+        public bool Correct { get; set; } = false;
     }
 }
