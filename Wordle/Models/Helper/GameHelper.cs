@@ -22,7 +22,7 @@ namespace Wordle.Models.Helper
 
             return game;
         }
-    
+
         // Updates GameModel in DB and add to highscore if game is won
         public GameModel UpdateGameModel(string userId, string guess)
         {
@@ -39,9 +39,9 @@ namespace Wordle.Models.Helper
             {
                 char[] guessArr = guess.ToCharArray();
                 char[] letterStatus = new char[5];
-                
-                string attemptJson = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus( guess, game.GameWord) }.ToJson();
-                
+
+                string attemptJson = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) }.ToJson();
+
                 game.Score++; //Dual purpose. Keeps track of attemps untill game is finished. Then keeprs score
 
                 switch (game.Score) //Set guess to attempt(x)
@@ -94,61 +94,10 @@ namespace Wordle.Models.Helper
             if (guess == gameWord)
             {
                 return new GameViewModel
-                    { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord), Correct = true };
-            }
-            
-           return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus( guess, gameWord )};
-        }
-
-        // Highscore Alltime
-        public IEnumerable<HighscoreViewModel> HighscoreAllTime()
-        {
-            // Sort out alltime top 10 ressult by score then by time.
-            List<HighscoreModel> alltime = _context.Highscores
-                .OrderByDescending(x => x.Score)
-                .ThenByDescending(x => x.Timer)
-                .Take(10)
-                .ToList();
-
-            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(alltime));
-
-            return hsViewModel;
-        }
-
-        // Highscore Today
-        public IEnumerable<HighscoreViewModel> HighscoreToday()
-        {
-            // Sort out todays top 10 ressult by score then by time.
-            List<HighscoreModel> today = _context.Highscores
-                .Where(x => x.Date == DateTime.Now.Date)
-                .OrderByDescending(x => x.Score)
-                .ThenByDescending(x => x.Timer)
-                .Take(10)
-                .ToList();
-
-            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(today));
-
-            return hsViewModel;
-        }
-
-        // Creates HighscoreViewModel list of HighscoreModel
-        public IEnumerable<HighscoreViewModel> HighscoreToViewModel(IEnumerable<HighscoreModel> hsModel)
-        {
-            List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>();
-
-            // Puts ressults into viewmodel
-            foreach (HighscoreModel model in hsModel)
-            {
-                HighscoreViewModel x = new HighscoreViewModel()
-                {
-                    Score = model.Score,
-                    Timer = model.Timer,
-                    Date = model.Date,
-                };
-                hsViewModel.Add(x);
+                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord), Correct = true };
             }
 
-            return hsViewModel;
+            return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord) };
         }
 
         private char[] GetLetterStatus(string guess, string gameWord)
@@ -156,7 +105,7 @@ namespace Wordle.Models.Helper
             char[] guessArr = guess.ToUpper().ToCharArray();
             char[] gameWordArr = gameWord.ToUpper().ToCharArray();
             char[] letterStatus = new char[5];
-            
+
             if (guess.Equals(gameWord))
             {
                 letterStatus = new char[] { '1', '1', '1', '1', '1' };
