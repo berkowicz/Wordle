@@ -41,9 +41,10 @@ namespace Wordle.Models.Helper
                 char[] guessArr = guess.ToCharArray();
                 char[] letterStatus = new char[5];
 
-                GameViewModel attempt = new GameViewModel
-                    { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };
-                if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
+                
+                //View model to save attempt status to db
+                GameViewModel attempt = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };
+                if (game.GameWord.ToUpper().Equals(guess.ToUpper())) 
                 {
                     attempt.Correct = true;
                 }
@@ -70,6 +71,7 @@ namespace Wordle.Models.Helper
                         game.Attempt5 = attemptJson;
                         break;
                 }
+                
                 // Win scenario also Post result to Highscore
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
@@ -145,11 +147,10 @@ namespace Wordle.Models.Helper
 
         public string RandomWord()
         {
-            string jsonFilePath = "./Data/wordlist.json";
-            string jsonString = File.ReadAllText(jsonFilePath);
+            string jsonString = File.ReadAllText("./Data/wordlist.json"); //Get list of words
             
-            JObject jsonData = JObject.Parse(jsonString);
-            JArray words = jsonData["words"] as JArray;
+            JObject jsonData = JObject.Parse(jsonString); //Parse to Json object
+            JArray words = jsonData["words"] as JArray; //Make array of key "words"
             
             return words[new Random().Next(words.Count)].ToString();
         }

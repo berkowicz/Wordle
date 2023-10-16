@@ -9,20 +9,12 @@ let myToken;
 
 const apiHost = '/api/game';
 
-/*
-*  To do:
-*   
-*  Input fielad for guesses
-*  On submit = send request to api/game{gameid}/{guess}
-*  Listen to response
-* 
-* */
 const Game = () => {
 
  
     const [attempts, setAttempts] = useState([]);
     const [guess, setGuess] = useState("");
-    const [guessCount, setGuessCount] = useState(0);
+    const [creatingNewGame, setCreatingNewGame] = useState(false);
     const [gameFinished, setGameFinished] = useState(false)
 
 
@@ -31,24 +23,35 @@ const Game = () => {
 
         //Async function to fetch token
         const FetchDataWithToken = async () => {
-            myToken = await Auth.getAccessToken()
-            config = {
-                headers: myToken ? { 'Authorization': `Bearer ${myToken}` } : {}
-            };
-            FetchGame();
-        };
 
-        FetchDataWithToken();
+            myToken = await Auth.getAccessToken(); //Get token
+            config.headers = { 'Authorization': `Bearer ${myToken}` } // Set request header
+
+
+            FetchGame(); // Try to fetch a game
+            };
+
+        
+
+        FetchDataWithToken(); 
     }, []);
 
 
     //Create a new game in the database
     const newGame = async () => {
 
-        axios.post(apiHost, {}, config)
+        //Check to prevent that multiple games are created
+        if (creatingNewGame) {
+            return;
+        }
 
-        //Load recently created game
-        FetchGame();
+
+        setCreatingNewGame(true); //Set creatingNewGame state
+
+        axios.post(apiHost, {}, config)
+        .then(() => FetchGame()) //Load recently created game
+        .finally(() => setCreatingNewGame(false)) // Reset creatingNewGame state
+        
     }
 
 
@@ -74,12 +77,6 @@ const Game = () => {
             })
             .then(data => {
                 
-                
-                
-                console.log("Orginal")
-                console.log(data)
-                
-
                 //For each "Attempt"-key, assign it to attempts usestate
                 for (let i = 1; i <= 5; i++) {
                     const attemptKey = `attempt${i}`;
@@ -110,11 +107,6 @@ const Game = () => {
                     acc[key.charAt(0).toUpperCase() + key.slice(1)] = result[key];
                     return acc;
                 }, {});
-
-
-
-                console.log("Skicka")
-                console.log(result.correct)
                 
                 if(result.correct){
                     setGameFinished(true);
@@ -127,18 +119,15 @@ const Game = () => {
 
     
 
+    //When guess is set and 5 letters send guess. 
+    //To be changed to listening for enter
     useEffect(() => {
         if (guess.length === 5) {
-            console.log("5 letters!");
             SendGuess();
             setGuess("");
         }
     }, [guess])
 
-
-    useEffect(() => {
-        console.log(attempts)
-    }, [attempts])
 
 
   return (
