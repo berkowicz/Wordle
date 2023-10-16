@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using Wordle.Data;
 using Wordle.Models.ViewModels;
@@ -40,7 +41,14 @@ namespace Wordle.Models.Helper
                 char[] guessArr = guess.ToCharArray();
                 char[] letterStatus = new char[5];
 
-                string attemptJson = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) }.ToJson();
+                GameViewModel attempt = new GameViewModel
+                    { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };
+                if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
+                {
+                    attempt.Correct = true;
+                }
+
+                string attemptJson = attempt.ToJson();
 
                 game.Score++; //Dual purpose. Keeps track of attemps untill game is finished. Then keeprs score
 
@@ -133,6 +141,17 @@ namespace Wordle.Models.Helper
             }
 
             return letterStatus;
+        }
+
+        public string RandomWord()
+        {
+            string jsonFilePath = "./Data/wordlist.json";
+            string jsonString = File.ReadAllText(jsonFilePath);
+            
+            JObject jsonData = JObject.Parse(jsonString);
+            JArray words = jsonData["words"] as JArray;
+            
+            return words[new Random().Next(words.Count)].ToString();
         }
 
     }

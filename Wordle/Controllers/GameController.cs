@@ -27,13 +27,11 @@ namespace Wordle.Controllers
         [HttpPost]
         public NewGameViewModel NewGame()
         {
-
-
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
-
             var publicId = Guid.NewGuid().ToString();
-            var gameWord = "hello";
+            var gameWord = _gameHelper.RandomWord();
+            
             _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord.ToUpper(), UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
@@ -45,6 +43,8 @@ namespace Wordle.Controllers
         public IActionResult Get()
         {
 
+            
+            
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 
