@@ -21,6 +21,8 @@ namespace Wordle.Models
         public bool GameOver { get; set; } = false;
         public DateTime Timer { get; set; } = DateTime.Now;
 
+        public int CompleteTime { get; set; } = 0;
+
         public int Score { get; set; } = 0;
 
         [ForeignKey("User")]
