@@ -53,7 +53,11 @@ namespace Wordle.Controllers
             {
                 return NotFound("No active game");
             }
-            return Ok(loadGame); // Returns the GameHelper object as JSON
+
+            FetchGameViewModel gameView = new FetchGameViewModel(loadGame);
+         
+            
+            return Ok(gameView); // Returns the GameHelper object as JSON
 
         }
 
