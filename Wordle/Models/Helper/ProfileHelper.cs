@@ -41,8 +41,8 @@ namespace Wordle.Models.Helper
 
             return new ProfileViewModel()
             {
-                Score = score,
-                Time = time,
+                Score = score / totalGames,
+                Time = time / totalGames,
                 WinPercent = wonGames / totalGames * 100,
             };
         }

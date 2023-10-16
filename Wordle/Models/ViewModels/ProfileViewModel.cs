@@ -3,7 +3,7 @@
     public class ProfileViewModel
     {
         public float WinPercent { get; set; }
-        public int Score { get; set; }
-        public int Time { get; set; }
+        public float Score { get; set; }
+        public float Time { get; set; }
     }
 }
