@@ -102,13 +102,16 @@ namespace Wordle.Models.Helper
         //Checks the placement of each letter in guess
         public GameViewModel CheckWord(string guess, string gameWord)
         {
+
+            GameViewModel result = new GameViewModel
+                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess.ToUpper(), gameWord.ToUpper()) };
+            
             if (guess == gameWord)
             {
-                return new GameViewModel
-                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord), Correct = true };
+                result.Correct = true;
             }
 
-            return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord) };
+            return result;
         }
 
         private char[] GetLetterStatus(string guess, string gameWord)
@@ -152,7 +155,7 @@ namespace Wordle.Models.Helper
             JObject jsonData = JObject.Parse(jsonString); //Parse to Json object
             JArray words = jsonData["words"] as JArray; //Make array of key "words"
             
-            return words[new Random().Next(words.Count)].ToString();
+            return words[new Random().Next(words.Count)].ToString().ToUpper();
         }
 
     }

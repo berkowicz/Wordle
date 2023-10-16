@@ -25,6 +25,7 @@ namespace Wordle.Controllers
 
         // POST: api/game
         [HttpPost]
+        [Authorize]
         public NewGameViewModel NewGame()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
@@ -32,7 +33,7 @@ namespace Wordle.Controllers
             var publicId = Guid.NewGuid().ToString();
             var gameWord = _gameHelper.RandomWord();
             
-            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord.ToUpper(), UserRefId = userId });
+            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord, UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
@@ -81,7 +82,7 @@ namespace Wordle.Controllers
             else
             {
                 // Returns char array with info of each letters position
-                var viewModel = _gameHelper.CheckWord(guess.ToUpper(), gameModel.GameWord.ToUpper());
+                var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
                 return Ok(viewModel);
             }
 
