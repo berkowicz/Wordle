@@ -13,6 +13,7 @@ namespace Wordle.Models.Helper
             _context = context;
         }
 
+        // 
         public ProfileViewModel UserGameData(string userId)
         {
             // Sort out alltime top 10 ressult by score then by time.
@@ -25,21 +26,20 @@ namespace Wordle.Models.Helper
             int score = 0;
             int time = 0;
 
+            //Loops each game to update values
             foreach (var userGame in userGames)
             {
                 totalGames++;
+                // Won games
                 if (userGame.GameCompleted is true)
                 {
-                    var hsModel = _context.Highscores
-                        .Include(x => x.GameRefId == userGame.Id)
-                        .FirstOrDefault();
-                    time += hsModel.Timer;
                     wonGames++;
+                    time += userGame.CompleteTime;
                     score += userGame.Score;
                 }
             }
 
-            return new ProfileViewModel
+            return new ProfileViewModel()
             {
                 Score = score,
                 Time = time,

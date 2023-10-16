@@ -27,16 +27,8 @@ namespace Wordle.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId == null)
-            {
-                return Unauthorized("Not authorized");
-            }
-
             ProfileViewModel userData = _profileHelper.UserGameData(userId);
-            if (userData == null)
-            {
-                return NotFound("No active game");
-            }
+
             return Ok(userData); // Returns the GameHelper object as JSON
         }
     }

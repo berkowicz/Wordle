@@ -66,14 +66,15 @@ namespace Wordle.Models.Helper
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
                     game.GameCompleted = true;
-                    HighscoreModel x = new HighscoreModel()
+                    HighscoreModel hsModel = new HighscoreModel()
                     {
                         Score = game.Score,
                         Timer = (game.Timer.Second - DateTime.Now.Second),
                         Date = DateTime.Now.Date,
                         GameRefId = game.Id,
                     };
-                    _context.Highscores.Add(x);
+                    game.CompleteTime = hsModel.Timer;
+                    _context.Highscores.Add(hsModel);
                 }
                 // Game Over scenario
                 else if (game.Score == 5)
