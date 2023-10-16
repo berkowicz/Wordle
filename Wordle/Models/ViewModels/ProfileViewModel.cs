@@ -2,7 +2,7 @@
 {
     public class ProfileViewModel
     {
-        public int WinPercent { get; set; }
+        public float WinPercent { get; set; }
         public int Score { get; set; }
         public int Time { get; set; }
     }

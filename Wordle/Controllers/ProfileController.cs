@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Wordle.Data;
 using Wordle.Models.Helper;
+using Wordle.Models.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +22,7 @@ namespace Wordle.Controllers
         }
 
         // GET: api/<ProfileController>
-        /*[HttpGet]
+        [HttpGet]
         public IActionResult Get()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -36,6 +38,6 @@ namespace Wordle.Controllers
                 return NotFound("No active game");
             }
             return Ok(userData); // Returns the GameHelper object as JSON
-        }*/
+        }
     }
 }
