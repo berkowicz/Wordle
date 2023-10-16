@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Wordle.Data;
 using Wordle.Models;
@@ -40,16 +41,11 @@ namespace Wordle.Controllers
 
         // GET api/game
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == null)
-            {
-                return Unauthorized("Not authorized");
-            }
-
 
 
             GameModel loadGame = _gameHelper.FindGame(userId);
