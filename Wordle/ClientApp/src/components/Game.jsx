@@ -153,12 +153,14 @@ const Game = () => {
 
       
           }
-        <div className=' guessword input active'>
+        {
+        gameFinished != true && <div className=' guessword input active'>
         <Input value={ guess }  />
 
         </div>
+        }
         {
-        Array(4 - attempts.length).fill(null).map((_, index) => (
+        attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
             <div className=' guessword input'>
             <Input  />
             </div>
