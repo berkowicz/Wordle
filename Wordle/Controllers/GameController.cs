@@ -31,7 +31,7 @@ namespace Wordle.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
             var publicId = Guid.NewGuid().ToString();
-            var gameWord = _gameHelper.RandomWord();
+            var gameWord = _gameHelper.RandomWord(userId);
             
             _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord, UserRefId = userId });
             _context.SaveChanges();

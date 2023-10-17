@@ -148,14 +148,35 @@ namespace Wordle.Models.Helper
             return letterStatus;
         }
 
-        public string RandomWord()
+        public string RandomWord(string refId)
         {
             string jsonString = File.ReadAllText("./Data/wordlist.json"); //Get list of words
             
             JObject jsonData = JObject.Parse(jsonString); //Parse to Json object
             JArray words = jsonData["words"] as JArray; //Make array of key "words"
-            
-            return words[new Random().Next(words.Count)].ToString().ToUpper();
+                                                        //string randomWord = words[new Random().Next(words.Count)].ToString().ToUpper();
+            string randomWord;
+            bool wordExistsInGame;
+
+            do
+            {
+                // Get a new random word
+                randomWord = words[new Random().Next(words.Count)].ToString().ToUpper();
+
+                // Get last n games 
+                var lastGames = _context.Games
+                    .Where(x => x.UserRefId == refId)
+                    .OrderByDescending(x => x.Timer) // Assuming you have an "Id" or a timestamp to determine the order
+                    .Take(25)
+                    .ToList();
+
+                //Check if user got the word reacently, then re-run the generator
+                wordExistsInGame = lastGames.Any(game => game.GameWord == randomWord);
+
+            } while (wordExistsInGame);
+
+
+            return randomWord;
         }
 
     }
