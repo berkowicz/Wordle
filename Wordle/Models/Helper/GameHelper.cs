@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using Wordle.Data;
 using Wordle.Models.ViewModels;
@@ -40,7 +41,15 @@ namespace Wordle.Models.Helper
                 char[] guessArr = guess.ToCharArray();
                 char[] letterStatus = new char[5];
 
-                string attemptJson = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) }.ToJson();
+                
+                //View model to save attempt status to db
+                GameViewModel attempt = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };
+                if (game.GameWord.ToUpper().Equals(guess.ToUpper())) 
+                {
+                    attempt.Correct = true;
+                }
+
+                string attemptJson = attempt.ToJson();
 
                 game.Score++; //Dual purpose. Keeps track of attemps untill game is finished. Then keeprs score
 
@@ -62,6 +71,7 @@ namespace Wordle.Models.Helper
                         game.Attempt5 = attemptJson;
                         break;
                 }
+                
                 // Win scenario also Post result to Highscore
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
@@ -92,13 +102,16 @@ namespace Wordle.Models.Helper
         //Checks the placement of each letter in guess
         public GameViewModel CheckWord(string guess, string gameWord)
         {
-            if (guess == gameWord)
+
+            GameViewModel result = new GameViewModel
+                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess.ToUpper(), gameWord.ToUpper()) };
+            
+            if (guess.ToUpper() == gameWord.ToUpper())
             {
-                return new GameViewModel
-                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord), Correct = true };
+                result.Correct = true;
             }
 
-            return new GameViewModel { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess, gameWord) };
+            return result;
         }
 
         private char[] GetLetterStatus(string guess, string gameWord)
@@ -133,6 +146,37 @@ namespace Wordle.Models.Helper
             }
 
             return letterStatus;
+        }
+
+        public string RandomWord(string refId)
+        {
+            string jsonString = File.ReadAllText("./Data/wordlist.json"); //Get list of words
+            
+            JObject jsonData = JObject.Parse(jsonString); //Parse to Json object
+            JArray words = jsonData["words"] as JArray; //Make array of key "words"
+                                                        //string randomWord = words[new Random().Next(words.Count)].ToString().ToUpper();
+            string randomWord;
+            bool wordExistsInGame;
+
+            do
+            {
+                // Get a new random word
+                randomWord = words[new Random().Next(words.Count)].ToString().ToUpper();
+
+                // Get last n games 
+                var lastGames = _context.Games
+                    .Where(x => x.UserRefId == refId)
+                    .OrderByDescending(x => x.Timer) // Assuming you have an "Id" or a timestamp to determine the order
+                    .Take(25)
+                    .ToList();
+
+                //Check if user got the word reacently, then re-run the generator
+                wordExistsInGame = lastGames.Any(game => game.GameWord == randomWord);
+
+            } while (wordExistsInGame);
+
+
+            return randomWord;
         }
 
     }

@@ -25,16 +25,15 @@ namespace Wordle.Controllers
 
         // POST: api/game
         [HttpPost]
+        [Authorize]
         public NewGameViewModel NewGame()
         {
-
-
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
-
             var publicId = Guid.NewGuid().ToString();
-            var gameWord = "hello";
-            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord.ToUpper(), UserRefId = userId });
+            var gameWord = _gameHelper.RandomWord(userId);
+            
+            _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord, UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
@@ -45,6 +44,8 @@ namespace Wordle.Controllers
         public IActionResult Get()
         {
 
+            
+            
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 
@@ -53,7 +54,11 @@ namespace Wordle.Controllers
             {
                 return NotFound("No active game");
             }
-            return Ok(loadGame); // Returns the GameHelper object as JSON
+
+            FetchGameViewModel gameView = new FetchGameViewModel(loadGame);
+         
+            
+            return Ok(gameView); // Returns the GameHelper object as JSON
 
         }
 
@@ -77,7 +82,13 @@ namespace Wordle.Controllers
             else
             {
                 // Returns char array with info of each letters position
-                var viewModel = _gameHelper.CheckWord(guess.ToUpper(), gameModel.GameWord.ToUpper());
+                var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
+
+                if(gameModel.GameOver) {
+
+                    viewModel.Word = gameModel.GameWord;
+                }
+
                 return Ok(viewModel);
             }
 

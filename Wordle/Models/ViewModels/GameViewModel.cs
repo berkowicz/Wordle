@@ -6,5 +6,8 @@
         public char[] LetterStatus { get; set; }
 
         public bool Correct { get; set; } = false;
+
+        public string? Word { get; set; }
+
     }
 }

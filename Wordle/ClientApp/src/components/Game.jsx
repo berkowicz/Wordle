@@ -9,21 +9,17 @@ let myToken;
 
 const apiHost = '/api/game';
 
-/*
-*  To do:
-*   
-*  Input fielad for guesses
-*  On submit = send request to api/game{gameid}/{guess}
-*  Listen to response
-* 
-* */
+
+
 const Game = () => {
 
- 
     const [attempts, setAttempts] = useState([]);
-    const [guess, setGuess] = useState("");
-    const [guessCount, setGuessCount] = useState(0);
+    const [guess, setGuess] = useState('');
+    const [creatingNewGame, setCreatingNewGame] = useState(false); 
     const [gameFinished, setGameFinished] = useState(false)
+    const [gameOver, setGameOver] = useState(false)
+    const [correctWord, setCorrectWord] = useState("")
+
 
 
     //Set token and request header config at load
@@ -31,31 +27,44 @@ const Game = () => {
 
         //Async function to fetch token
         const FetchDataWithToken = async () => {
-            myToken = await Auth.getAccessToken()
-            config = {
-                headers: myToken ? { 'Authorization': `Bearer ${myToken}` } : {}
-            };
-            FetchGame();
+
+            myToken = await Auth.getAccessToken(); //Get token
+            config.headers = myToken ? { 'Authorization': `Bearer ${myToken}` } : {} // Set request header
+            
+            FetchGame(); // Try to fetch a game
+        
         };
+
+
 
         FetchDataWithToken();
     }, []);
+
+  
 
 
     //Create a new game in the database
     const newGame = async () => {
 
-        axios.post(apiHost, {}, config)
+        //Check to prevent that multiple games are created
+        if (creatingNewGame) {
+            return;
+        }
 
-        //Load recently created game
-        FetchGame();
+
+        setCreatingNewGame(true); //Set creatingNewGame state
+
+        axios.post(apiHost, {}, config)
+        .then(() => FetchGame()) //Load recently created game
+        .finally(() => setCreatingNewGame(false)) // Reset creatingNewGame state
+
     }
 
 
 
     //Fetch active game
     const FetchGame = async () => {
-        
+
         const response = await fetch(apiHost, config)
             .then(data => {
 
@@ -73,12 +82,6 @@ const Game = () => {
                 }
             })
             .then(data => {
-                
-                
-                
-                console.log("Orginal")
-                console.log(data)
-                
 
                 //For each "Attempt"-key, assign it to attempts usestate
                 for (let i = 1; i <= 5; i++) {
@@ -97,11 +100,15 @@ const Game = () => {
 
     const SendGuess = async () => {
 
+        
+
         //Add put method to header config
         let putConfig = {
             ...config,
             method: 'PUT'
           };
+
+
 
         const response = await fetch(`${apiHost}/${guess}`, putConfig)
             .then(data => data.json())
@@ -111,69 +118,116 @@ const Game = () => {
                     return acc;
                 }, {});
 
-
-
-                console.log("Skicka")
-                console.log(result.correct)
-                
                 if(result.correct){
                     setGameFinished(true);
                 }
+                
 
                 setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
-
+                setCorrectWord(result.word)
             })
+
+        setGuess('');
     }
+
+    useEffect(() => {
+        if(!gameFinished && attempts.length === 5){
+            setGameOver(true);
+        }
+
+    }, [attempts]);
 
     
 
-    useEffect(() => {
-        if (guess.length === 5) {
-            console.log("5 letters!");
-            SendGuess();
-            setGuess("");
-        }
-    }, [guess])
+ //Setting up keypress
+ useEffect(() => {
+        
+    const handleKeyPress = async (event) => 
+    {
+
+        var pressedKey = event.key;
+        var pressedKeyCode = event.keyCode;
+        var EnterKeyCode = 13;
+        var DeleteKeyCode = 8;
+        
+        if(pressedKey.match(/[a-zA-ZåäöÅÄÖ]|Enter|Backspace/)){
+
+            switch( pressedKeyCode ) {
+
+                case DeleteKeyCode:
+
+                setGuess(guessValue => guessValue.slice(0, -1))
+                    
+                    break;
+                case EnterKeyCode:
+                    if(guess.length === 5)
+                    {
+
+                        SendGuess();
+                    }
+                    
+                    break;
+                default:
+                    if(guess.length < 5){
+
+                        setGuess(guessValue => guessValue + pressedKey)
+                    }        
+                        
+                break;
+
+                }
+
+            }
+
+    };
 
 
-    useEffect(() => {
-        console.log(attempts)
-    }, [attempts])
+    document.body.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.body.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [guess]);
+
+
+
 
 
   return (
-    <>
+    <div className='game-container'>
     {
-      attempts.map(prop => (
+      attempts.map(attempt => (
          <>
-        <Guess value={ prop } />
+        <Guess value={ attempt } />
 
          </>
       ))
 
-      
+
           }
         {
-        gameFinished != true && <div className=' guessword input active'>
+        gameFinished != true && !gameOver &&  <div className=' guessword input active'>
         <Input value={ guess }  />
 
         </div>
         }
         {
         attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
-            <div className=' guessword input'>
+            <>
+
+            <div key={ index } className=' guessword input '>
             <Input  />
             </div>
+
+
+            </>
         ))
     }
-        
-        {gameFinished ? <div>Du klarade det!</div> :
-          <form>
-            <input type="text" name="input" id="guessinput" value={ guess } onChange={ (e) => setGuess(e.target.value) } />
-          </form>
-}
-          
-    </>
+
+        {gameFinished ?  <div className='finishedGame'>Du klarade det!
+        </div> : gameOver ? <div className='finishedGame'>Game over! <br/> {correctWord} </div>  : ""}
+
+    </div>
   )
 }
 
