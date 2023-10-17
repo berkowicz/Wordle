@@ -18,6 +18,8 @@ const Game = () => {
     const [creatingNewGame, setCreatingNewGame] = useState(false); 
     const [gameFinished, setGameFinished] = useState(false)
     const [gameOver, setGameOver] = useState(false)
+    const [correctWord, setCorrectWord] = useState("")
+
 
 
     //Set token and request header config at load
@@ -122,7 +124,7 @@ const Game = () => {
                 
 
                 setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
-
+                setCorrectWord(result.word)
             })
 
         setGuess('');
@@ -223,7 +225,7 @@ const Game = () => {
     }
 
         {gameFinished ?  <div className='finishedGame'>Du klarade det!
-        </div> : gameOver ? <div className='finishedGame'>Game over!</div> : ""}
+        </div> : gameOver ? <div className='finishedGame'>Game over! <br/> {correctWord} </div>  : ""}
 
     </div>
   )

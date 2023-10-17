@@ -83,6 +83,12 @@ namespace Wordle.Controllers
             {
                 // Returns char array with info of each letters position
                 var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
+
+                if(gameModel.GameOver) {
+
+                    viewModel.Word = gameModel.GameWord;
+                }
+
                 return Ok(viewModel);
             }
 
