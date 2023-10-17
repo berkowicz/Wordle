@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Wordle.Data;
+﻿using Wordle.Data;
 using Wordle.Models.ViewModels;
 
 namespace Wordle.Models.Helper
@@ -18,7 +17,7 @@ namespace Wordle.Models.Helper
         {
             // Sort out alltime top 10 ressult by score then by time.
             var userGames = _context.Games
-                .Include(x => x.UserRefId == userId)
+                .Where(x => x.UserRefId == userId)
                 .ToList();
 
             int totalGames = 0;
