@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useState } from "react";
-import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 import HighscoreAllTime from './HighscoreAllTime';
 import HighscoreToday from './HighscoreToday';
@@ -13,12 +12,8 @@ let myToken;
 
 const Profile = () => {
 
-
-
     const [highscore, setHighscore] = useState([[]]);
-    const [userStats, setUserStats] = useState([[]]);
-
-    //Set token and request header config at load
+    const [userStats, setUserStats] = useState([]);
 
     useEffect(() => {
 

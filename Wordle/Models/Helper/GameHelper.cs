@@ -76,7 +76,7 @@ namespace Wordle.Models.Helper
                         Date = DateTime.Now.Date,
                         GameRefId = game.Id,
                     };
-                    game.CompleteTime = hsModel.Timer;
+                    game.CompleteTime = secondsDifference;
                     _context.Highscores.Add(hsModel);
                 }
                 // Game Over scenario
