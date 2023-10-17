@@ -9,14 +9,14 @@ let myToken;
 
 const apiHost = '/api/game';
 
+
+
 const Game = () => {
 
- 
     const [attempts, setAttempts] = useState([]);
-    const [guess, setGuess] = useState("");
-    const [creatingNewGame, setCreatingNewGame] = useState(false);
+    const [guess, setGuess] = useState('');
+    const [creatingNewGame, setCreatingNewGame] = useState(false); 
     const [gameFinished, setGameFinished] = useState(false)
-
 
     //Set token and request header config at load
     useEffect(() => {
@@ -25,16 +25,20 @@ const Game = () => {
         const FetchDataWithToken = async () => {
 
             myToken = await Auth.getAccessToken(); //Get token
-            config.headers = { 'Authorization': `Bearer ${myToken}` } // Set request header
+            config.headers = myToken ? { 'Authorization': `Bearer ${myToken}` } : {} // Set request header
+            };
+             
 
 
             FetchGame(); // Try to fetch a game
-            };
+            
 
-        
 
-        FetchDataWithToken(); 
+
+        FetchDataWithToken();
     }, []);
+
+  
 
 
     //Create a new game in the database
@@ -51,14 +55,14 @@ const Game = () => {
         axios.post(apiHost, {}, config)
         .then(() => FetchGame()) //Load recently created game
         .finally(() => setCreatingNewGame(false)) // Reset creatingNewGame state
-        
+
     }
 
 
 
     //Fetch active game
     const FetchGame = async () => {
-        
+
         const response = await fetch(apiHost, config)
             .then(data => {
 
@@ -76,7 +80,7 @@ const Game = () => {
                 }
             })
             .then(data => {
-                
+
                 //For each "Attempt"-key, assign it to attempts usestate
                 for (let i = 1; i <= 5; i++) {
                     const attemptKey = `attempt${i}`;
@@ -100,6 +104,8 @@ const Game = () => {
             method: 'PUT'
           };
 
+
+
         const response = await fetch(`${apiHost}/${guess}`, putConfig)
             .then(data => data.json())
             .then(result => {
@@ -107,7 +113,7 @@ const Game = () => {
                     acc[key.charAt(0).toUpperCase() + key.slice(1)] = result[key];
                     return acc;
                 }, {});
-                
+
                 if(result.correct){
                     setGameFinished(true);
                 }
@@ -115,32 +121,76 @@ const Game = () => {
                 setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
 
             })
+
+        setGuess('');
     }
 
-    
 
-    //When guess is set and 5 letters send guess. 
-    //To be changed to listening for enter
-    useEffect(() => {
-        if (guess.length === 5) {
-            SendGuess();
-            setGuess("");
-        }
-    }, [guess])
+ //Setting up keypress
+ useEffect(() => {
+        
+    const handleKeyPress = async (event) => 
+    {
+
+        var pressedKey = event.key;
+        var pressedKeyCode = event.keyCode;
+        var EnterKeyCode = 13;
+        var DeleteKeyCode = 8;
+        
+        if(pressedKey.match(/[a-zA-ZåäöÅÄÖ]|Enter|Backspace/)){
+
+            switch( pressedKeyCode ) {
+
+                case DeleteKeyCode:
+
+                setGuess(guessValue => guessValue.slice(0, -1))
+                    
+                    break;
+                case EnterKeyCode:
+                    if(guess.length === 5)
+                    {
+
+                        SendGuess();
+                    }
+                    
+                    break;
+                default:
+                    if(guess.length < 5){
+
+                        setGuess(guessValue => guessValue + pressedKey)
+                    }        
+                        
+                break;
+
+                }
+
+            }
+
+    };
+
+
+    document.body.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.body.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [guess]);
+
+
 
 
 
   return (
     <>
     {
-      attempts.map(prop => (
+      attempts.map(attempt => (
          <>
-        <Guess value={ prop } />
+        <Guess value={ attempt } />
 
          </>
       ))
 
-      
+
           }
         {
         gameFinished != true && <div className=' guessword input active'>
@@ -150,18 +200,16 @@ const Game = () => {
         }
         {
         attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
-            <div className=' guessword input'>
+            <div key={ index } className=' guessword input '>
             <Input  />
             </div>
         ))
     }
-        
-        {gameFinished ? <div>Du klarade det!</div> :
-          <form>
-            <input type="text" name="input" id="guessinput" value={ guess } onChange={ (e) => setGuess(e.target.value) } />
-          </form>
+
+        {gameFinished ? <div>Du klarade det!</div> : ""
 }
-          
+
+{guess.length}
     </>
   )
 }
