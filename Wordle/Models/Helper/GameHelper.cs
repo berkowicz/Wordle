@@ -75,15 +75,18 @@ namespace Wordle.Models.Helper
                 // Win scenario also Post result to Highscore
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
+                    TimeSpan timeDifference = DateTime.Now - game.Timer;
+                    int secondsDifference = (int)timeDifference.TotalSeconds;
+
                     game.GameCompleted = true;
                     HighscoreModel hsModel = new HighscoreModel()
                     {
                         Score = game.Score,
-                        Timer = (game.Timer.Second - DateTime.Now.Second),
+                        Timer = secondsDifference,
                         Date = DateTime.Now.Date,
                         GameRefId = game.Id,
                     };
-                    game.CompleteTime = hsModel.Timer;
+                    game.CompleteTime = secondsDifference;
                     _context.Highscores.Add(hsModel);
                 }
                 // Game Over scenario

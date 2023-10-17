@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Wordle.Data;
+﻿using Wordle.Data;
 using Wordle.Models.ViewModels;
 
 namespace Wordle.Models.Helper
@@ -18,12 +17,12 @@ namespace Wordle.Models.Helper
         {
             // Sort out alltime top 10 ressult by score then by time.
             var userGames = _context.Games
-                .Include(x => x.UserRefId == userId)
+                .Where(x => x.UserRefId == userId)
                 .ToList();
 
-            int totalGames = 0;
-            int wonGames = 0;
-            int score = 0;
+            float totalGames = 0;
+            float wonGames = 0;
+            float score = 0;
             int time = 0;
 
             //Loops each game to update values
@@ -41,8 +40,8 @@ namespace Wordle.Models.Helper
 
             return new ProfileViewModel()
             {
-                Score = score / totalGames,
-                Time = time / totalGames,
+                Score = score / wonGames,
+                Time = time / wonGames,
                 WinPercent = wonGames / totalGames * 100,
             };
         }

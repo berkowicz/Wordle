@@ -17,8 +17,8 @@ namespace Wordle.Models.Helper
         {
             // Sort out alltime top 10 ressult by score then by time.
             List<HighscoreModel> alltime = _context.Highscores
-                .OrderByDescending(x => x.Score)
-                .ThenByDescending(x => x.Timer)
+                .OrderBy(x => x.Score)
+                .ThenBy(x => x.Timer)
                 .Take(10)
                 .ToList();
 
@@ -33,8 +33,8 @@ namespace Wordle.Models.Helper
             // Sort out todays top 10 ressult by score then by time.
             List<HighscoreModel> today = _context.Highscores
                 .Where(x => x.Date == DateTime.Now.Date)
-                .OrderByDescending(x => x.Score)
-                .ThenByDescending(x => x.Timer)
+                .OrderBy(x => x.Score)
+                .ThenBy(x => x.Timer)
                 .Take(10)
                 .ToList();
 
