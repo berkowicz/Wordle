@@ -17,6 +17,8 @@ const Game = () => {
     const [guess, setGuess] = useState('');
     const [creatingNewGame, setCreatingNewGame] = useState(false); 
     const [gameFinished, setGameFinished] = useState(false)
+    const [gameOver, setGameOver] = useState(false)
+
 
     //Set token and request header config at load
     useEffect(() => {
@@ -26,12 +28,10 @@ const Game = () => {
 
             myToken = await Auth.getAccessToken(); //Get token
             config.headers = myToken ? { 'Authorization': `Bearer ${myToken}` } : {} // Set request header
-            };
-             
-
-
-            FetchGame(); // Try to fetch a game
             
+            FetchGame(); // Try to fetch a game
+        
+        };
 
 
 
@@ -98,6 +98,8 @@ const Game = () => {
 
     const SendGuess = async () => {
 
+        
+
         //Add put method to header config
         let putConfig = {
             ...config,
@@ -117,6 +119,7 @@ const Game = () => {
                 if(result.correct){
                     setGameFinished(true);
                 }
+                
 
                 setAttempts((prevAttempts) => [...prevAttempts, JSON.stringify(resultWithUppercaseKeys)]);
 
@@ -125,6 +128,14 @@ const Game = () => {
         setGuess('');
     }
 
+    useEffect(() => {
+        if(!gameFinished && attempts.length === 5){
+            setGameOver(true);
+        }
+
+    }, [attempts]);
+
+    
 
  //Setting up keypress
  useEffect(() => {
@@ -181,7 +192,7 @@ const Game = () => {
 
 
   return (
-    <>
+    <div className='game-container'>
     {
       attempts.map(attempt => (
          <>
@@ -193,24 +204,28 @@ const Game = () => {
 
           }
         {
-        gameFinished != true && <div className=' guessword input active'>
+        gameFinished != true && !gameOver &&  <div className=' guessword input active'>
         <Input value={ guess }  />
 
         </div>
         }
         {
         attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
+            <>
+
             <div key={ index } className=' guessword input '>
             <Input  />
             </div>
+
+
+            </>
         ))
     }
 
-        {gameFinished ? <div>Du klarade det!</div> : ""
-}
+        {gameFinished ?  <div className='finishedGame'>Du klarade det!
+        </div> : gameOver ? <div className='finishedGame'>Game over!</div> : ""}
 
-{guess.length}
-    </>
+    </div>
   )
 }
 
