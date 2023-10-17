@@ -20,9 +20,9 @@ namespace Wordle.Models.Helper
                 .Where(x => x.UserRefId == userId)
                 .ToList();
 
-            int totalGames = 0;
-            int wonGames = 0;
-            int score = 0;
+            float totalGames = 0;
+            float wonGames = 0;
+            float score = 0;
             int time = 0;
 
             //Loops each game to update values
