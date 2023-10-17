@@ -106,7 +106,7 @@ namespace Wordle.Models.Helper
             GameViewModel result = new GameViewModel
                 { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess.ToUpper(), gameWord.ToUpper()) };
             
-            if (guess == gameWord)
+            if (guess.ToUpper() == gameWord.ToUpper())
             {
                 result.Correct = true;
             }
