@@ -41,7 +41,8 @@ code {
 }
 
 .game-container,
-.highscore-container {
+.highscore-container,
+.home-container {
     position: relative;
     margin: 0 auto;
     width: fit-content;

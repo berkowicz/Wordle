@@ -5,7 +5,7 @@ export class Home extends Component {
 
   render() {
     return (
-      <div>
+      <div className='home-container'>
             <h1>Welcome to Wordle</h1>
       </div>
     );
