@@ -144,13 +144,15 @@ const Game = () => {
         
     const handleKeyPress = async (event) => 
     {
+        console.log("pressed")
 
         var pressedKey = event.key;
         var pressedKeyCode = event.keyCode;
         var EnterKeyCode = 13;
         var DeleteKeyCode = 8;
+        var test = keyIsAllowed(pressedKeyCode)
         
-        if(pressedKey.match(/[a-zA-ZåäöÅÄÖ]|Enter|Backspace/)){
+        if (keyIsAllowed(pressedKeyCode)){
 
             switch( pressedKeyCode ) {
 
@@ -179,7 +181,9 @@ const Game = () => {
 
             }
 
-    };
+     };
+
+
 
 
     document.body.addEventListener('keydown', handleKeyPress);
@@ -189,6 +193,23 @@ const Game = () => {
     };
   }, [guess]);
 
+
+    const keyIsAllowed = (key) => {
+        const AkeyCode = 65;
+        const ZkeyCode = 90;
+        var EnterKeyCode = 13;
+        var DeleteKeyCode = 8;
+
+        //A-Z, Å, Ä, Ö
+        if ((key >= AkeyCode && key <= ZkeyCode) || key === 222 || key === 221 || key === 192 || key === DeleteKeyCode || key === EnterKeyCode) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+
+    }
 
 
 
