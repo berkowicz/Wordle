@@ -48,13 +48,13 @@ export class LoginMenu extends Component {
   authenticatedView(userName, profilePath, logoutPath, logoutState) {
     return (<Fragment>
       <NavItem>
-        <NavLink tag={Link} className="text-dark" to={profilePath}>Hello {userName}</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink replace tag={Link} className="text-dark" to={logoutPath} state={logoutState}>Logout</NavLink>
+        <NavLink replace tag={Link} className="text-dark" to="/game" state={logoutState}>Spel</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink replace tag={Link} className="text-dark" to="/game" state={logoutState}>Spel</NavLink>
+            <NavLink replace tag={Link} className="text-dark" to="/profile" state={logoutState}>Profile</NavLink>
+        </NavItem>
+      <NavItem>
+        <NavLink replace tag={Link} className="text-dark" to={logoutPath} state={logoutState}>Logout</NavLink>
         </NavItem>
     </Fragment>);
   }
