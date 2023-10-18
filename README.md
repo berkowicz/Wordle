@@ -2,7 +2,7 @@
 
 ## Intro
 
-This is our attempt to create an interpetation of Wordle.
+This is our attempt to create an interpretation of Wordle.
 The program handles all logic serverside and presents the data to the React-client via our viewmodels to minimize data exposure.
 
 ## Setup
