@@ -57,15 +57,15 @@ const Profile = () => {
     return (
         <>
             {
-                <div>
-                    <div>
+                <div className='highscore-container'>
+                    <div className='profile-score-field'>
+                        <UserStats value={ userStats } />
+                    </div>
+                    <div className='profile-score-field'>
                         <HighscoreAllTime value={ highscore } />
                     </div>
-                    <div>
+                    <div className='profile-score-field'>
                         <HighscoreToday value={ highscore } />
-                    </div>
-                    <div>
-                        <UserStats value={ userStats } />
                     </div>
                 </div>
             }
