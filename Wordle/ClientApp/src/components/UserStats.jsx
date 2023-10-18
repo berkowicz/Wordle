@@ -3,10 +3,16 @@
 const UserStats = ({ value }) => {
 
     return (
-        <div>
-            <h2>Your avg stats</h2>
-            <p>
-                {`Win percent: ${value.winPercent}% | Score: ${value.score} | Time: ${value.time}`}
+        <div className='profile-score-field'>
+            <h2>Your average stats</h2>
+            <p className='userStats-p'>
+                {`Win percent: ${value.winPercent}%`}
+            </p>
+            <p className='userStats-p'>
+                {`Avg score won games: ${value.score}`} 
+            </p>
+            <p className='userStats-p'>
+                {`Avg time won games: ${value.time}`}
             </p>
         </div>
     );

@@ -40,11 +40,12 @@ code {
   border: .25rem solid #808080;
 }
 
-.game-container{
-  position: relative;
-  margin: 0 auto;
-  width: fit-content;
-
+.game-container,
+.highscore-container,
+.home-container {
+    position: relative;
+    margin: 0 auto;
+    width: fit-content;
 }
 
 .guessword{
@@ -65,4 +66,29 @@ code {
   font-size: 3rem;
   box-sizing: border-box;
   border-radius: .5rem;
+}
+
+.profile-score-field{
+    margin-bottom: 2rem;
+}
+
+.highscore-ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1rem;
+}
+
+.highscore-li {
+    padding-bottom: 0.5em;
+}
+
+.userStats-p {
+    margin: 0;
+}
+
+.highscore-ul,
+.highscore-li,
+.userStats-p {
+    font-weight: bold;
+    color: gray;
 }

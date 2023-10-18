@@ -4,12 +4,12 @@ const HighscoreAllTime= ({ value }) => {
     const allTime = value.highscoreAllTime;
 
     return (
-        <div>
+        <div className='profile-score-field'>
             <h2>All Time High Scores</h2>
-            <ul>
+            <ul className='highscore-ul'>
                 {allTime && allTime.map((array, index) => (
-                    <li key={index}>
-                        {`${index + 1} | Score: ${array.score} | Time: ${array.timer} | Date: ${array.date}`}
+                    <li className='highscore-li' key={index}>
+                        {`#${index + 1} | Score: ${array.score} | Time: ${array.timer} | Date: ${array.date}`}
                     </li>
                 ))}
             </ul>
