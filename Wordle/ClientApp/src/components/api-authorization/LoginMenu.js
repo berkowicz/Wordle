@@ -3,6 +3,9 @@ import { NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
+import { ReactComponent as User } from '../../assets/img/profile.svg';
+import { ReactComponent as LogOut } from '../../assets/img/logout.svg';
+
 
 export class LoginMenu extends Component {
   constructor(props) {
@@ -47,14 +50,12 @@ export class LoginMenu extends Component {
 
   authenticatedView(userName, profilePath, logoutPath, logoutState) {
     return (<Fragment>
-      <NavItem>
-        <NavLink replace tag={Link} className="text-dark" to="/game" state={logoutState}>Spel</NavLink>
-        </NavItem>
+
         <NavItem>
-            <NavLink replace tag={Link} className="text-dark" to="/profile" state={logoutState}>Profile</NavLink>
+            <NavLink replace tag={Link} className="profile" to="/profile" state={logoutState}><User /> Min profil </NavLink>
         </NavItem>
       <NavItem>
-        <NavLink replace tag={Link} className="text-dark" to={logoutPath} state={logoutState}>Logout</NavLink>
+        <NavLink replace tag={Link} className="login" to={logoutPath} state={logoutState}><LogOut /></NavLink>
         </NavItem>
     </Fragment>);
   }
@@ -65,7 +66,7 @@ export class LoginMenu extends Component {
         <NavLink tag={Link} className="text-dark" to={registerPath}>Register</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink tag={Link} className="text-dark" to={loginPath}>Login</NavLink>
+        <NavLink tag={Link} className="login" to={loginPath}>Login</NavLink>
       </NavItem>
     </Fragment>);
   }

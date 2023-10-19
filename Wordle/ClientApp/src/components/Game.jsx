@@ -3,15 +3,18 @@ import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 import Guess from './Guess';
 import Input from './Input';
+import Keyboard from './Keyboard';
+import GameOver from './GameOver';
 
 let config = { headers: {} }; //Request header to be filled with JWT token
 let myToken;
+let done = false;
 
 const apiHost = '/api/game';
 
 
 
-const Game = () => {
+const Game = ( { resethandler } ) => {
 
     const [attempts, setAttempts] = useState([]);
     const [guess, setGuess] = useState('');
@@ -40,6 +43,7 @@ const Game = () => {
         FetchDataWithToken();
     }, []);
 
+
   
 
 
@@ -64,6 +68,8 @@ const Game = () => {
 
     //Fetch active game
     const FetchGame = async () => {
+
+        done = false;
 
         const response = await fetch(apiHost, config)
             .then(data => {
@@ -136,7 +142,14 @@ const Game = () => {
         }
 
     }, [attempts]);
+    useEffect(() => {
 
+        if(gameFinished || gameOver){
+            done = true;
+
+        }
+
+    }, [gameFinished,gameOver]);
     
 
  //Setting up keypress
@@ -150,7 +163,6 @@ const Game = () => {
         var pressedKeyCode = event.keyCode;
         var EnterKeyCode = 13;
         var DeleteKeyCode = 8;
-        var test = keyIsAllowed(pressedKeyCode)
         
         if (keyIsAllowed(pressedKeyCode)){
 
@@ -162,11 +174,19 @@ const Game = () => {
                     
                     break;
                 case EnterKeyCode:
+              
+                if(done){
+                    console.log("!!!!!")
+
+                    handleReset();
+                }
+     
                     if(guess.length === 5)
                     {
 
                         SendGuess();
                     }
+
                     
                     break;
                 default:
@@ -211,44 +231,60 @@ const Game = () => {
 
     }
 
+    const handleReset = () => {
+        resethandler();
+      };
 
 
 
   return (
+    <>
     <div className='game-container'>
     {
-      attempts.map(attempt => (
-         <>
+        attempts.map(attempt => (
+            <>
         <Guess value={ attempt } />
 
          </>
       ))
-
-
-          }
+      
+      
+    }
         {
-        gameFinished != true && !gameOver &&  <div className=' guessword input active'>
+            gameFinished != true && !gameOver &&  <div className=' guessword input active'>
         <Input value={ guess }  />
 
         </div>
         }
         {
-        attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
-            <>
+            attempts.length < 4 && Array(4 - attempts.length).fill(null).map((_, index) => (
+                <>
 
             <div key={ index } className=' guessword input '>
             <Input  />
             </div>
+
+        
 
 
             </>
         ))
     }
 
-        {gameFinished ?  <div className='finishedGame'>Du klarade det!
-        </div> : gameOver ? <div className='finishedGame'>Game over! <br/> {correctWord} </div>  : ""}
-
+        {
+        gameFinished ?  
+        <GameOver reset={ handleReset }  />: 
+        gameOver ? 
+        <GameOver correct={correctWord} reset={ handleReset } />
+        : ""
+        }
+   
+   
     </div>
+ 
+    <Keyboard value={ attempts }/>
+    </>
+
   )
 }
 

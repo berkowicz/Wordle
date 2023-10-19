@@ -89,7 +89,7 @@ export class Login extends Component {
         // is when we are doing a redirect sign in flow.
         throw new Error('Should not redirect.');
       case AuthenticationResultStatus.Success:
-        await this.navigateToReturnUrl(this.getReturnUrl(result.state));
+        await this.navigateToReturnUrl("/");
         break;
       case AuthenticationResultStatus.Fail:
         this.setState({ message: result.message });
