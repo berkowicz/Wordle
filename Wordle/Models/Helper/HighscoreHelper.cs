@@ -22,6 +22,7 @@ namespace Wordle.Models.Helper
                 .Take(10)
                 .ToList();
 
+            // Creates new HighscoreViewModel and sends HighscoreModel list to HighscoreToViewModel to return data.
             List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(alltime));
 
             return hsViewModel;
@@ -38,6 +39,7 @@ namespace Wordle.Models.Helper
                 .Take(10)
                 .ToList();
 
+            // Creates new HighscoreViewModel and sends HighscoreModel list to HighscoreToViewModel to return data.
             List<HighscoreViewModel> hsViewModel = new List<HighscoreViewModel>(HighscoreToViewModel(today));
 
             return hsViewModel;
