@@ -15,7 +15,7 @@ namespace Wordle.Models.Helper
         // 
         public ProfileViewModel UserGameData(string userId)
         {
-            // Sort out alltime top 10 ressult by score then by time.
+            // Selects all games for logged in user.
             var userGames = _context.Games
                 .Where(x => x.UserRefId == userId)
                 .ToList();
@@ -40,9 +40,9 @@ namespace Wordle.Models.Helper
 
             return new ProfileViewModel()
             {
-                Score = score / wonGames,
-                Time = time / wonGames,
-                WinPercent = wonGames / totalGames * 100,
+                Score = score / wonGames, //Get average score
+                Time = time / wonGames, //Get average time
+                WinPercent = wonGames / totalGames * 100, // Get winpercent
             };
         }
     }

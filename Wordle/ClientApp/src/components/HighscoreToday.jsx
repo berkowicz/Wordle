@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 
 const HighscoreToday = ({ value }) => {
-    const today = value.highscoreToday;
-    console.log(today)
+    const today = value.highscoreToday; // Todays highscore array
+
+    // Maps data and returns data to /profile
     return (
         <div className='profile-score-field'>
             <h2>Todays High Scores</h2>

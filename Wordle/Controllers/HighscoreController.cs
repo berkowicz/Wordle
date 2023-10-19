@@ -21,7 +21,7 @@ namespace Wordle.Controllers
 
         // GET api/<HighscoreController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get() // Get global top 10 highscore all-time and today
         {
             var highscoreAllTime = _highscoreHelper.HighscoreAllTime();
             var highscoreToday = _highscoreHelper.HighscoreToday();
@@ -32,6 +32,7 @@ namespace Wordle.Controllers
                 HighscoreToday = highscoreToday
             };
 
+            // Returns nested arrays in JSON object
             return Ok(result);
         }
     }

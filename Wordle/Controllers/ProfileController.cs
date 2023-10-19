@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Wordle.Data;
 using Wordle.Models.Helper;
@@ -23,13 +24,14 @@ namespace Wordle.Controllers
 
         // GET: api/<ProfileController>
         [HttpGet]
-        public IActionResult Get()
+        [Authorize]
+        public IActionResult Get() // Get logged in user statistics, average values.
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             ProfileViewModel userData = _profileHelper.UserGameData(userId);
 
-            return Ok(userData); // Returns the GameHelper object as JSON
+            return Ok(userData); // Returns the ProfileHelper object as JSON
         }
     }
 }

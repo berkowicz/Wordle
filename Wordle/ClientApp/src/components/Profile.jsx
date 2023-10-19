@@ -7,13 +7,10 @@ import UserStats from './UserStats';
 let config = { headers: {} }; //Request header to be filled with JWT token
 let myToken;
 
-//const apiHost = '/api/Profile';
-
-
 const Profile = () => {
 
-    const [highscore, setHighscore] = useState([[]]);
-    const [userStats, setUserStats] = useState([]);
+    const [highscore, setHighscore] = useState([[]]); // Nested arrays with top 10 today and all-time
+    const [userStats, setUserStats] = useState([]); //Array with user average statistic data
 
     useEffect(() => {
 
@@ -30,6 +27,7 @@ const Profile = () => {
         FetchDataWithToken();
     }, []);
 
+    // Fetch logged in users statistic average data (uses token)
     const fetchDataProfile = async () => {
         try {
             myToken = await Auth.getAccessToken()
@@ -44,6 +42,7 @@ const Profile = () => {
         }
     }
 
+    // Fetch global highscore top 10 today and all-time (dosen't use token)
     const fetchDataHighscore = async () => {
         try {
             const response = await fetch('/api/highscore')
