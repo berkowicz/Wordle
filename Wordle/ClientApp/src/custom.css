@@ -6,38 +6,70 @@ code {
   color: #E01A76;
 }
 
+body{
+  background-color: #61acbc;
+  font-family: 'Nunito', sans-serif;
+  /* background-image: linear-gradient(to bottom, #f5decf, #f2d4bc); */
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 .letter{
-  height: 4rem;
-  width: 4rem;
-  background: rgb(196, 196, 196);
-  color: rgb(48, 48, 48);
+  height: 2em;
+  width: 2em;
+  background: #ffecd0;
+  box-shadow: inset 4px 4px #fffffd,
+  inset -4px -4px #c08c65
+  ;
+  border: 2px solid #042636;
+  color: #042636;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
-  margin: .25rem;
-  border-radius: .5rem;
+  font-size: 1.7rem;
+  font-weight: 1000;
+  /* margin: .25rem; */
+  border-radius: .25rem;
 
 }
 
 .letter-1{
-  background: #afd75e;
+  color: #7ecc00; 
 }
 .letter-2{
-  background: rgb(253, 229, 79);
+  color: #faa60a;
 }
 .letter-3{
-  background: #ff7272;
+  color: #ee5502;;
+}
+.k-letter-1{
+  background-color: #7ecc00; 
+}
+.k-letter-2{
+  background-color: #faa60a;
+}
+.k-letter-3{
+  background-color: #868686;
+}
+
+.l-small{
+  font-size: 1rem;
+  text-transform: uppercase;
+
+  box-shadow: inset 4px 4px #fffffd7a,
+  inset -4px -4px #b6b6b679
+  ;
 }
 
 .active > .letter{
-  background-color: #e0e0e0;
-  border: .25rem solid #808080;
+  background-color: #f8dec7;
+  box-shadow: inset -2px -2px #fffffd,
+  inset 3px 4px #c08c65
+  ;
+  /* border: .25rem solid #80808049; */
 }
 
 .game-container,
@@ -46,10 +78,18 @@ code {
     position: relative;
     margin: 0 auto;
     width: fit-content;
+    /* box-shadow:     1px 2px 2px hsl(0deg 0% 50% / 0.2),
+    2px 4px 4px hsl(0deg 0% 50% / 0.2),
+    4px 8px 8px hsl(0deg 0% 50% / 0.2),
+    8px 16px 16px hsl(0deg 0% 50% / 0.2),
+    16px 32px 32px hsl(0deg 0% 50% / 0.2); */
+}
+.game-container{
 }
 
 .guessword{
   display: flex;
+  justify-content: center;
 }
 
 .finishedGame{
@@ -92,3 +132,40 @@ code {
     font-weight: bold;
     color: gray;
 }
+
+
+.wrapper{
+  background: #fffde7;
+  border-radius: 1rem;
+  /* border: 2px solid black; */
+  box-shadow: .2rem .2rem #f29653, .5rem .5rem #f29653, 1rem 1rem #10657a, 1.2rem 1.2rem #10657a, 1.3rem 1.3rem #10657a;
+  overflow: hidden;
+  margin: 2rem auto;
+  width: 50vw;
+  min-height: 50vh;
+
+}
+
+.button-blue {
+  padding: 10px 20px;
+  background-color: #1E90FF; /* Sample blue color; adjust as needed */
+  border: none;
+  border-radius: 8px; /* Rounded corners */
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  cursor: pointer;
+  transition: transform 0.2s; /* Smooth press effect */
+}
+
+.keyboard{
+  display: flex;
+  flex-direction: column;
+}
+.keyboard > div{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+}
+

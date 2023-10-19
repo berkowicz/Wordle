@@ -3,6 +3,7 @@ import axios from 'axios'
 import Auth from './api-authorization/AuthorizeService'
 import Guess from './Guess';
 import Input from './Input';
+import Keyboard from './Keyboard';
 
 let config = { headers: {} }; //Request header to be filled with JWT token
 let myToken;
@@ -240,6 +241,8 @@ const Game = () => {
             <Input  />
             </div>
 
+        
+
 
             </>
         ))
@@ -247,7 +250,7 @@ const Game = () => {
 
         {gameFinished ?  <div className='finishedGame'>Du klarade det!
         </div> : gameOver ? <div className='finishedGame'>Game over! <br/> {correctWord} </div>  : ""}
-
+        <Keyboard value={ attempts }/>
     </div>
   )
 }
