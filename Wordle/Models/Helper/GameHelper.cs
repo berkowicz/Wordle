@@ -41,10 +41,10 @@ namespace Wordle.Models.Helper
                 char[] guessArr = guess.ToCharArray();
                 char[] letterStatus = new char[5];
 
-                
+
                 //View model to save attempt status to db
                 GameViewModel attempt = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };
-                if (game.GameWord.ToUpper().Equals(guess.ToUpper())) 
+                if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
                     attempt.Correct = true;
                 }
@@ -71,14 +71,17 @@ namespace Wordle.Models.Helper
                         game.Attempt5 = attemptJson;
                         break;
                 }
-                
+
                 // Win scenario also Post result to Highscore
                 if (game.GameWord.ToUpper().Equals(guess.ToUpper()))
                 {
+                    // Calculates total time in seconds from start to finish of game
                     TimeSpan timeDifference = DateTime.Now - game.Timer;
                     int secondsDifference = (int)timeDifference.TotalSeconds;
 
                     game.GameCompleted = true;
+
+                    // Create new HighscoreModel
                     HighscoreModel hsModel = new HighscoreModel()
                     {
                         Score = game.Score,
@@ -86,7 +89,8 @@ namespace Wordle.Models.Helper
                         Date = DateTime.Now.Date,
                         GameRefId = game.Id,
                     };
-                    game.CompleteTime = secondsDifference;
+
+                    game.CompleteTime = secondsDifference; //Sets game time to GameModel
                     _context.Highscores.Add(hsModel);
                 }
                 // Game Over scenario
@@ -107,8 +111,8 @@ namespace Wordle.Models.Helper
         {
 
             GameViewModel result = new GameViewModel
-                { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess.ToUpper(), gameWord.ToUpper()) };
-            
+            { Guess = guess.ToCharArray(), LetterStatus = GetLetterStatus(guess.ToUpper(), gameWord.ToUpper()) };
+
             if (guess.ToUpper() == gameWord.ToUpper())
             {
                 result.Correct = true;
@@ -154,7 +158,7 @@ namespace Wordle.Models.Helper
         public string RandomWord(string refId)
         {
             string jsonString = File.ReadAllText("./Data/wordlist.json"); //Get list of words
-            
+
             JObject jsonData = JObject.Parse(jsonString); //Parse to Json object
             JArray words = jsonData["words"] as JArray; //Make array of key "words"
                                                         //string randomWord = words[new Random().Next(words.Count)].ToString().ToUpper();
