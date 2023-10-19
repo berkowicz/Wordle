@@ -6,6 +6,7 @@ import Game from './Game';
 const NewHome = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [seed, setSeed] = useState(1);
 
     useEffect(() => {
 
@@ -26,9 +27,17 @@ const NewHome = () => {
         console.log("first")
         console.log(isAuthenticated)
     }, [isAuthenticated]);
+
+
+    const changeSeed = () => {
+
+      setSeed(Math.random());
+
+    }
+
   return (
 
-    isAuthenticated ? <Game /> :
+    isAuthenticated ? <Game  key={seed} resethandler={ changeSeed } /> :
     <div>Logga in!</div> 
   )
 }

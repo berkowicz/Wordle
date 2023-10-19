@@ -21,27 +21,32 @@ const Keyboard = ({ value }) => {
     }, [arr]);
 
     const findLetterStatus = (attemptsArray, letterToFind) => {
-        for (let i = 0; i < attemptsArray.length; i++) {
+        for (let i = attemptsArray.length - 1; i >= 0; i--) {
             const guess = attemptsArray[i].Guess;
             const letterStatus = attemptsArray[i].LetterStatus;
-
+    
             if (guess.includes(letterToFind)) {
-                // Assuming guess and letterStatus have the same length
-                const index = guess.indexOf(letterToFind); 
-                return letterStatus[index];
+                const index = guess.indexOf(letterToFind);
+                if (letterStatus[index] === '1') {
+                    return '1';
+                } else if (letterStatus[index] === '2') {
+                    return '2';
+                } else if (letterStatus[index] === '3') {
+                    return '3';
+                }
             }
         }
-        return null; // Return null if the letter is not found in any guess
-    };
+        return null;
+    }
 
     return (
         keys && <div className='keyboard'>
             {keys.map((row, rowIndex) => (
                 <div key={rowIndex}>
                     {row.split('').map((letter, letterIndex) => (
-                        findLetterStatus(arr, letter) === "1" ? <div className='letter l-small k-letter-1' key={letterIndex}>{letter}</div> :
-                        findLetterStatus(arr, letter) === "2" ? <div className='letter l-small k-letter-2' key={letterIndex}>{letter}</div> :
-                        findLetterStatus(arr, letter) === "3" ? <div className='letter l-small k-letter-3' key={letterIndex}>{letter}</div> :
+                        findLetterStatus(arr, letter) === "3" ? <div className='letter l-small letter-3' key={letterIndex}>{letter}</div> :
+                        findLetterStatus(arr, letter) === "2" ? <div className='letter l-small letter-2' key={letterIndex}>{letter}</div> :
+                        findLetterStatus(arr, letter) === "1" ? <div className='letter l-small letter-1' key={letterIndex}>{letter}</div> :
                         <div className='letter l-small' key={letterIndex}>{letter} </div>
                     ))}
                 </div>
