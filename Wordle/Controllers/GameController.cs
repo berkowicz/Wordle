@@ -23,31 +23,28 @@ namespace Wordle.Controllers
             _gameHelper = new GameHelper(context);
         }
 
-        // POST: api/game
+        // POST: api/<GameController>
         [HttpPost]
         [Authorize]
-        public NewGameViewModel NewGame()
+        public NewGameViewModel NewGame() // Create new game
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
             var publicId = Guid.NewGuid().ToString();
             var gameWord = _gameHelper.RandomWord(userId);
-            
+
+            //Adds new row to GameModel
             _context.Add(new GameModel() { PublicId = publicId, GameWord = gameWord, UserRefId = userId });
             _context.SaveChanges();
             return new NewGameViewModel() { GameId = publicId };
         }
 
-        // GET api/game
+        // GET api/<GameController>
         [HttpGet]
         [Authorize]
-        public IActionResult Get()
+        public IActionResult Get() // Load existing game
         {
-
-            
-            
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
             GameModel loadGame = _gameHelper.FindGame(userId);
             if (loadGame == null)
@@ -56,24 +53,25 @@ namespace Wordle.Controllers
             }
 
             FetchGameViewModel gameView = new FetchGameViewModel(loadGame);
-         
-            
+
             return Ok(gameView); // Returns the GameHelper object as JSON
 
         }
 
-
+        // PUT api/<GameController>/guessWord
         [HttpPut("{guess}")]
+        [Authorize]
         //Return if correct, or correct characters
         public IActionResult UpdateGame(string guess)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
             if (userId == null)
             {
                 return Unauthorized("Not authorized");
             }
 
+            //Updates GameModel
             var gameModel = _gameHelper.UpdateGameModel(userId, guess);
             if (gameModel is null)
             {
@@ -84,20 +82,15 @@ namespace Wordle.Controllers
                 // Returns char array with info of each letters position
                 var viewModel = _gameHelper.CheckWord(guess, gameModel.GameWord);
 
-                if(gameModel.GameOver) {
-
+                if (gameModel.GameOver)
+                {
+                    //Set Word to GameWord to display to user
                     viewModel.Word = gameModel.GameWord;
                 }
 
                 return Ok(viewModel);
             }
 
-        }
-
-        // DELETE api/<GameController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
