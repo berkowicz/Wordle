@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 
 const HighscoreAllTime= ({ value }) => {
-    const allTime = value.highscoreAllTime;
+    const allTime = value.highscoreAllTime; // All-time highscore array
 
+    // Maps data and returns data to /profile
     return (
         <div className='profile-score-field'>
             <h2>All Time High Scores</h2>

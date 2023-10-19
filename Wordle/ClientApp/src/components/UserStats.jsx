@@ -2,6 +2,7 @@
 
 const UserStats = ({ value }) => {
 
+    // Returns data to /profile
     return (
         <div className='profile-score-field'>
             <h2>Your average stats</h2>
