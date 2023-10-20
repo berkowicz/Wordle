@@ -39,8 +39,6 @@ namespace Wordle.Models.Helper
             else
             {
                 char[] guessArr = guess.ToCharArray();
-                char[] letterStatus = new char[5];
-
 
                 //View model to save attempt status to db
                 GameViewModel attempt = new GameViewModel { Guess = guessArr, LetterStatus = GetLetterStatus(guess, game.GameWord) };

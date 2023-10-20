@@ -2,18 +2,22 @@
 
 const UserStats = ({ value }) => {
 
+    const winPercent = Math.round(value.winPercent)
+    const attempts = Math.round(value.score)
+    const timeSpent = Math.round(value.time/60)
+
     // Returns data to /profile
     return (
         <div className='profile-score-field'>
-            <h2>Your average stats</h2>
+            <h2>Din statistik</h2>
+            <b className='userStats-p'>
+                {`Andel vunna: ${winPercent}%`}
+            </b>
             <p className='userStats-p'>
-                {`Win percent: ${value.winPercent}%`}
+                {`Snitt antal försök: ${attempts}`} 
             </p>
             <p className='userStats-p'>
-                {`Avg score won games: ${value.score}`} 
-            </p>
-            <p className='userStats-p'>
-                {`Avg time won games: ${value.time}`}
+                {`Snitt spenderad tid: ${timeSpent} min`}
             </p>
         </div>
     );

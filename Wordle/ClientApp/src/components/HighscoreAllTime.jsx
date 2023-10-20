@@ -1,19 +1,43 @@
 ﻿import React from 'react';
 
-const HighscoreAllTime= ({ value }) => {
+const HighscoreAllTime = ({ value }) => {
     const allTime = value.highscoreAllTime; // All-time highscore array
 
-    // Maps data and returns data to /profile
+    console.log(value)
+    // Function to format the date and time
+    const formatDateTime = (dateTimeString) => {
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour12: false,
+        };
+        return new Intl.DateTimeFormat('sv', options).format(new Date(dateTimeString));
+    };
+
     return (
         <div className='profile-score-field'>
-            <h2>All Time High Scores</h2>
-            <ul className='highscore-ul'>
-                {allTime && allTime.map((array, index) => (
-                    <li className='highscore-li' key={index}>
-                        {`#${index + 1} | Score: ${array.score} | Time: ${array.timer} | Date: ${array.date}`}
-                    </li>
-                ))}
-            </ul>
+            <h2>High score</h2>
+            <table className='highscore-table'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Försök</th>
+                        <th>Tid</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {allTime && allTime.map((array, index) => (
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{array.score}</td>
+                            <td>{array.timer}</td>
+                            <td>{formatDateTime(array.date).split(",")[0]}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

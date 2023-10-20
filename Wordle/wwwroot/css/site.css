@@ -42,7 +42,13 @@ html {
 }
 
 .container {
-  max-width: 960px;
+    background: #ffffff;
+    border-radius: 2rem;
+    border: 2px solid black;
+    margin: 2rem auto;
+    min-width: 24rem;
+    max-width: fit-content;
+    min-height: 30rem;
 }
 
 .pricing-header {

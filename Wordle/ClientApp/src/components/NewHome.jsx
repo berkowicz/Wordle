@@ -1,45 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import Auth from './api-authorization/AuthorizeService'
-import Game from './Game';
-
+import React, { useEffect, useState } from "react";
+import Auth from "./api-authorization/AuthorizeService";
+import Game from "./Game";
 
 const NewHome = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [seed, setSeed] = useState(1);
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [seed, setSeed] = useState(1);
+  useEffect(() => {
+    //Async function to fetch token
+    const FetchDataWithToken = async () => {
+      const authStatus = await Auth.isAuthenticated();
+      setIsAuthenticated(authStatus);
+    };
 
-    useEffect(() => {
+    FetchDataWithToken();
+  }, []);
 
-        //Async function to fetch token
-        const FetchDataWithToken = async () => {
+  useEffect(() => {
+  }, [isAuthenticated]);
 
-            const authStatus = await Auth.isAuthenticated();
-            setIsAuthenticated(authStatus)
-        
-        };
+  //Workaround to set random number as key to reload game component 
+  const changeSeed = () => {
+    setSeed(Math.random());
+  };
 
+  return isAuthenticated ? (
+    <Game key={seed} resethandler={changeSeed} />
+  ) : (
+    <div>Logga in!</div>
+  );
+};
 
-
-        FetchDataWithToken();
-    }, []);
-
-    useEffect(() => {
-        console.log("first")
-        console.log(isAuthenticated)
-    }, [isAuthenticated]);
-
-
-    const changeSeed = () => {
-
-      setSeed(Math.random());
-
-    }
-
-  return (
-
-    isAuthenticated ? <Game  key={seed} resethandler={ changeSeed } /> :
-    <div>Logga in!</div> 
-  )
-}
-
-export default NewHome
+export default NewHome;
