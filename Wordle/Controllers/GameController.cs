@@ -66,11 +66,6 @@ namespace Wordle.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //Get user ID from header
 
-            if (userId == null)
-            {
-                return Unauthorized("Not authorized");
-            }
-
             //Updates GameModel
             var gameModel = _gameHelper.UpdateGameModel(userId, guess);
             if (gameModel is null)

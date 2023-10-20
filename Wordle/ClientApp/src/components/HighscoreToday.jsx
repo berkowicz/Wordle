@@ -1,19 +1,31 @@
 ﻿import React from 'react';
 
 const HighscoreToday = ({ value }) => {
-    const today = value.highscoreToday; // Todays highscore array
+    const today = value.highscoreToday; // Todays high score array
 
-    // Maps data and returns data to /profile
     return (
         <div className='profile-score-field'>
-            <h2>Todays High Scores</h2>
-            <ul className='highscore-ul'>
-                {today && today.map((array, index) => (
-                    <li className='highscore-li' key={index}>
-                        {`#${index + 1} | Score: ${array.score} | Time: ${array.timer} | Date: ${array.date}`}
-                    </li>
-                ))}
-            </ul>
+            <h2>Dagens high score</h2>
+            <table className='highscore-table'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Score</th>
+                        <th>Tid (min)</th>
+              
+                    </tr>
+                </thead>
+                <tbody>
+                    {today && today.map((array, index) => (
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{Math.round(array.score)}</td>
+                            <td>{array.timer / 60}</td>
+                  
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

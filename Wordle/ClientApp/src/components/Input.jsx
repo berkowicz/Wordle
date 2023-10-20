@@ -1,37 +1,23 @@
-import React from 'react'
+import React from "react";
 
 const Input = ({ value = "" }) => {
-
-    const length = value.length
-    console.log(length)
+  const length = value.length;
 
   return (
-    
+    <>
+      {value.split("").map((item, index) => (
+        <div key={index} className="letter">
+          {item.toUpperCase()}
+        </div>
+      ))}
 
-  <>
- 
-  {
-    value.split('').map((item, index) => (
-      <div key={index} className="letter">{item.toUpperCase()}</div>
-    ))
-  }
-  
-  {
-         
-        Array(5 - length).fill(null).map((_, index) => (
-             <div key={index} className="letter"></div>
-             ))
-            
-             
-  }
-            
-            
-            </>
+      {Array(5 - length)
+        .fill(null)
+        .map((_, index) => (
+          <div key={index} className="letter"></div>
+        ))}
+    </>
+  );
+};
 
-       
-            
-    
-  )
-}
-
-export default Input
+export default Input;
