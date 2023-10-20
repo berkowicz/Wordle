@@ -3,6 +3,7 @@ import Game from './components/Game';
 import Profile from './components/Profile';
 import {Home} from "./components/Home";
 import NewHome from './components/NewHome';
+import Error from './components/Error';
 
 const AppRoutes = [
   {
@@ -18,7 +19,12 @@ const AppRoutes = [
     element: <Profile/>
   },
 
-  ...ApiAuthorzationRoutes
+
+  ...ApiAuthorzationRoutes,
+  {
+    path: "*",
+    element: <Error/>
+  },
 ];
 
 export default AppRoutes;
